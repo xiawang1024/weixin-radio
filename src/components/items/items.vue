@@ -74,6 +74,7 @@
 </template>
 
 <script>
+// const Hls = r => require.ensure([], () => r(require('hls'))) //如果是电脑端，则加载hls，否则不加载
 import Hls from 'hls'
 import Scroll from '@/base/scroll'
 import DatePick from '@/base/datePick'
@@ -81,7 +82,7 @@ import ProgressBar from '@/base/progress-bar'
 import Load from '@/components/load/load'
 import { getChannelItem, clickItem } from 'api/index'
 import { addClass } from 'common/js/dom.js'
-import { isPc } from 'common/js/isPc.js'
+import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import BScroll from 'better-scroll'
 export default {
 	name:'items',
@@ -107,7 +108,11 @@ export default {
 		}
 	},
 	created() {
+		if(this._isPc()){
+			this.hls = new Hls();
+		}
 		this.parseQuery()
+
 	},
 	mounted() {
 		this.audio = document.getElementById('audio')
@@ -156,7 +161,13 @@ export default {
 			this.$refs.listview.scroll && this.$refs.listview.scroll.scrollTo(0,0,1000)
 		},
 		_playSrc(stream) {
-			this.audio.setAttribute('src',stream)
+			if(this._isPc()){
+				// alert('pc')
+				this._playHlsSrc(stream)
+			}else{
+				// alert('phone')
+				this.audio.setAttribute('src',stream)
+			}
 		},
 		playSwitch() {
 			if(this.playOrPause){
@@ -275,6 +286,24 @@ export default {
 	        const currentTime = this.audio.duration * percent
 	        this.audio.currentTime = currentTime
 	    },
+			_isPc(){
+				if(isPc() == 'pc'){
+					return true
+				}else{
+					return false
+				}
+			},
+			_playHlsSrc(stream){
+				if(this._isPc()){
+					if(Hls.isSupported()) {
+						this.hls.loadSource(stream);
+						this.hls.attachMedia(this.audio);
+						this.hls.on(Hls.Events.MANIFEST_PARSED,function() {
+							this.audio.play();
+						});
+					}
+				}
+			}
 	}
 }
 </script>

@@ -6,7 +6,7 @@
       </keep-alive>
     <!-- </transition> -->
     <div class="audio-wrap">
-    	<video id="audio" autoplay width="0" height="0"></video>
+    	<audio id="audio" autoplay width="0" height="0"></audio>
     </div>
   </div>
 </template>

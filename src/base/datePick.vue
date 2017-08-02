@@ -105,7 +105,7 @@ export default {
 				dateWidth = document.getElementsByTagName('html')[0].style.fontSize;
 	    	this.dateWrapWidth = parseFloat(dateWidth) * 2 * 31;
 	    	dateWrap.style.width = Math.ceil(this.dateWrapWidth) + 'px';
-				console.log(this.dateWrapWidth)
+				// console.log(this.dateWrapWidth)
 	    },
 	    scrollTo() {
 	    	this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,800)
