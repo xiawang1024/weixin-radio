@@ -7,6 +7,7 @@
 			<img src="./logo.png" alt="" class="img">
 			<load class="load"></load>
 		</div>
+		<loading title="努力加载中..." v-if="isLoading"></loading>
 		<tab-slider
 			class="tab-slider-wrap"
 			v-if="itemsData.length>0"
@@ -51,6 +52,7 @@
 </template>
 
 <script>
+import Loading from '@/base/loading'
 import TabSlider from '@/base/tabSlider'
 import Scroll from '@/base/scroll'
 import Wave from '@/base/wave'
@@ -65,13 +67,23 @@ export default {
 		TabSlider,
 		Scroll,
 		Wave,
-		Load
+		Load,
+		Loading
 	},
 	data() {
 		return {
 			itemsData:[],
 			stream:null,
 			isPlayIndex:null
+		}
+	},
+	computed:{
+		isLoading() {
+			if(this.itemsData[0] == null){
+				return true
+			}else{
+				return false
+			}
 		}
 	},
 	mounted(){
@@ -104,6 +116,7 @@ export default {
 			})
 			Promise.all(promises).then((res) => {
 				this.itemsData = res
+				// setTimeout(() => {this.itemsData = res},3000) // 模拟网络延迟加载动画
 			})
 		},
 		goToItems(cid,stream) {
