@@ -75,7 +75,7 @@
 
 <script>
 // const Hls = r => require.ensure([], () => r(require('hls'))) //如果是电脑端，则加载hls，否则不加载
-import Hls from 'hls'
+// import Hls from 'hls'
 import Scroll from '@/base/scroll'
 import DatePick from '@/base/datePick'
 import ProgressBar from '@/base/progress-bar'
@@ -108,11 +108,7 @@ export default {
 		}
 	},
 	created() {
-		if(this._isPc()){
-			this.hls = new Hls();
-		}
 		this.parseQuery()
-
 	},
 	mounted() {
 		this.audio = document.getElementById('audio')
@@ -197,104 +193,109 @@ export default {
 			return `${hour}:${min}`
 		},
 		formatPlayTime(interval) {
-	        interval = interval | 0
-	        const minute = this._pad(interval / 60 | 0)
-	        const second = this._pad(interval % 60)
-	        return `${minute}:${second}`
-	    },
-	    _pad(num, n = 2) {
-	        let len = num.toString().length
-	        while (len < n) {
-	          num = '0' + num
-	          len++
-	        }
-	        return num
-	    },
-	    //点播列表
-	   	getDatePrograms(date){
-	   		let cid = this.cid;
-	   		let year = (new Date()).getFullYear();
-	   		let month = this._pad(new Date().getMonth() + 1);
-        let day = this._pad(new Date().getDate())
-	   		let time = year + '-' + date.date + ' 00:00:00.0';
-	   		let stamp = this._timeToStamp(time)
-	   		let nowDate = month +'-'+ day;
-	   		if(nowDate == date.date){// 如果点击的是今天，那么跳动到直播
-	   			this.isToDay = true
+      interval = interval | 0
+      const minute = this._pad(interval / 60 | 0)
+      const second = this._pad(interval % 60)
+      return `${minute}:${second}`
+    },
+    _pad(num, n = 2) {
+      let len = num.toString().length
+      while (len < n) {
+        num = '0' + num
+        len++
+      }
+      return num
+    },
+    //点播列表
+   	getDatePrograms(date){
+   		let cid = this.cid;
+   		let year = (new Date()).getFullYear();
+   		let month = this._pad(new Date().getMonth() + 1);
+      let day = this._pad(new Date().getDate())
+   		let time = year + '-' + date.date + ' 00:00:00.0';
+   		let stamp = this._timeToStamp(time)
+   		let nowDate = month +'-'+ day;
+   		if(nowDate == date.date){// 如果点击的是今天，那么跳动到直播
+   			this.isToDay = true
+   		}else{
+   			this.isToDay = false
+   		}
+   		this._getItems(this.cid, stamp, !this.isToDay)
+   	},
+   	playBackSrc(item, index) {
+   		let playUrl = item.playUrl;
+   		if(index == this.isPlayIndex){// 如果相等，则是直播，否则是点播
+   			this.isLivePlay = true
+   			this._playSrc(this.liveStream)
+   		}else{
+   			this.isLivePlay = false
+   			if(!playUrl){
+	   			return
 	   		}else{
-	   			this.isToDay = false
+	   			if(playUrl.length == 0){
+	   				return
+	   			}else{
+	   				//回听
+	   				this.playBackTitle = item.title;
+	   				this._playSrc(playUrl[0])
+	   			}
 	   		}
-	   		this._getItems(this.cid, stamp, !this.isToDay)
-	   	},
-	   	playBackSrc(item, index) {
-	   		let playUrl = item.playUrl;
-	   		if(index == this.isPlayIndex){// 如果相等，则是直播，否则是点播
-	   			this.isLivePlay = true
-	   			this._playSrc(this.liveStream)
-	   		}else{
-	   			this.isLivePlay = false
-	   			if(!playUrl){
-		   			return
-		   		}else{
-		   			if(playUrl.length == 0){
-		   				return
-		   			}else{
-		   				//回听
-		   				this.playBackTitle = item.title;
-		   				this._playSrc(playUrl[0])
-		   			}
-		   		}
-	   		}
-	   	},
-	   	_getToDay() {
-	   		let year = (new Date()).getFullYear();
-	   		let month = this._pad(new Date().getMonth() + 1);
-        	let day = this._pad(new Date().getDate())
-        	let today =`${year}-${month}-${day} 00:00:00.0`
-        	return today
-	   	},
-	   	//时间转时间戳
-	    _timeToStamp(date){
-	        // var date = '2015-03-05 00:00:00.0';
-	        date = date.substring(0,19);
-	        date = date.replace(/-/g,'/');
-	        var timestamp = new Date(date).getTime();
-	        return timestamp/1000;
-	    },
-	    _getItems(cid,time,isScrollTop){
-	    	clickItem(cid, time).then((res) => {
-	    		let data = res.data;
-	    		this.itemsList = data.programs
-	    		if(isScrollTop){
-	    			this._scrollTop()
-	    		}else{
-	    			this._scrollTo(this.isPlayIndex)
-	    		}
-	    	})
-	    },
-	    //监听播放信息
-	    watchPlayPercent() {
-	    	this.audio.addEventListener('timeupdate',(e) => {
-	    		const currentTime = e.target.currentTime;
-	    		const duration = e.target.duration
-	    		this.currentTime = currentTime
-	    		this.duration = duration
-	    		this.percent = currentTime / duration
-	    	})
-	    },
-	    onProgressBarChange(percent) {
-	        const currentTime = this.audio.duration * percent
-	        this.audio.currentTime = currentTime
-	    },
-			_isPc(){
-				if(isPc() == 'pc'){
-					return true
-				}else{
-					return false
-				}
-			},
-			_playHlsSrc(stream){
-				if(this._isPc()){
+   		}
+   	},
+   	_getToDay() {
+   		let year = (new Date()).getFullYear();
+   		let month = this._pad(new Date().getMonth() + 1);
+    	let day = this._pad(new Date().getDate())
+    	let today =`${year}-${month}-${day} 00:00:00.0`
+    	return today
+   	},
+   	//时间转时间戳
+    _timeToStamp(date){
+      // var date = '2015-03-05 00:00:00.0';
+      date = date.substring(0,19);
+      date = date.replace(/-/g,'/');
+      var timestamp = new Date(date).getTime();
+      return timestamp/1000;
+    },
+    _getItems(cid,time,isScrollTop){
+    	clickItem(cid, time).then((res) => {
+    		let data = res.data;
+    		this.itemsList = data.programs
+    		if(isScrollTop){
+    			this._scrollTop()
+    		}else{
+    			this._scrollTo(this.isPlayIndex)
+    		}
+    	})
+    },
+    //监听播放信息
+    watchPlayPercent() {
+    	this.audio.addEventListener('timeupdate',(e) => {
+    		const currentTime = e.target.currentTime;
+    		const duration = e.target.duration
+    		this.currentTime = currentTime
+    		this.duration = duration
+    		this.percent = currentTime / duration
+    	})
+    },
+    onProgressBarChange(percent) {
+      const currentTime = this.audio.duration * percent
+      this.audio.currentTime = currentTime
+    },
+		//判断是否是pc设备
+		_isPc(){
+			if(isPc() == 'pc'){
+				return true
+			}else{
+				return false
+			}
+		},
+		//pc设备通过hls.js插件播放，异步加载hls.js
+		_playHlsSrc(stream){
+			if(this._isPc()){
+				require.ensure([], () => {
+					const Hls = require('hls')
+					this.hls = new Hls();
 					if(Hls.isSupported()) {
 						this.hls.loadSource(stream);
 						this.hls.attachMedia(this.audio);
@@ -302,8 +303,9 @@ export default {
 							this.audio.play();
 						});
 					}
-				}
+				})
 			}
+		}
 	}
 }
 </script>
