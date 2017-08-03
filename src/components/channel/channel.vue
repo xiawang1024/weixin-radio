@@ -59,6 +59,7 @@ import Wave from '@/base/wave'
 import Load from '@/components/load/load'
 import {getClassItem} from "api/index"
 import BScroll from 'better-scroll'
+import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 
 const TAB_ARR = ['河南台','网络台','市县台']
 export default {
@@ -103,9 +104,14 @@ export default {
 		this.itemsData = new Array(3)
 	},
 	mounted() {
-		if(!document.getElementById('audio').getAttribute('src')){
-			document.getElementById('audio').setAttribute('src','http://stream.hndt.com:1935/live/xinwen/playlist.m3u8')
-		}
+		this.audio = document.getElementById('audio');
+		setTimeout(() => {
+			if(!document.getElementById('audio').getAttribute('src')){
+				// this.audio.setAttribute('src','http://stream.hndt.com:1935/live/xinwen/playlist.m3u8')
+				let stream = 'http://stream.hndt.com:1935/live/xinwen/playlist.m3u8';//进入首页默认播放新闻广播
+				this.playSrc(-1, stream)
+			}
+		},20)
 	},
 	methods:{
 		_getClassItem() {
@@ -127,9 +133,13 @@ export default {
 			this.$router.push({ path: '/items', query: { cid: cid }})
 		},
 		playSrc(cid,stream) {
-			let audio = document.getElementById('audio')
 			if(cid != this.isPlayIndex){
-				audio.setAttribute('src',stream)
+				// this.audio.setAttribute('src',stream)
+				if(this._isPc()){
+					this._playHlsSrc(stream)
+				}else{
+					this.audio.setAttribute('src',stream)
+				}
 			}
 		},
 		setPlayIndex(index){
@@ -142,6 +152,30 @@ export default {
 				this.isPlayIndex = isPlayIndex
 			}else{
 				this.isPlayIndex = 1
+			}
+		},
+		//判断是否是pc设备
+		_isPc(){
+			if(isPc() == 'pc'){
+				return true
+			}else{
+				return false
+			}
+		},
+		//pc设备通过hls.js插件播放，异步加载hls.js
+		_playHlsSrc(stream){
+			if(this._isPc()){
+				require.ensure([], () => {
+					const Hls = require('hls')
+					this.hls = new Hls();
+					if(Hls.isSupported()) {
+						this.hls.loadSource(stream);
+						this.hls.attachMedia(this.audio);
+						this.hls.on(Hls.Events.MANIFEST_PARSED,function() {
+							this.audio.play();
+						});
+					}
+				})
 			}
 		}
 	}

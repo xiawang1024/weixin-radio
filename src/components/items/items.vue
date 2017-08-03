@@ -158,10 +158,8 @@ export default {
 		},
 		_playSrc(stream) {
 			if(this._isPc()){
-				// alert('pc')
 				this._playHlsSrc(stream)
 			}else{
-				// alert('phone')
 				this.audio.setAttribute('src',stream)
 			}
 		},
