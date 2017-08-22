@@ -135,7 +135,7 @@ export default {
 		playSrc(cid,stream) {
 			if(cid != this.isPlayIndex){
 				// this.audio.setAttribute('src',stream)
-				if(this._isPc()){
+				if(this._isPc() && this._isM3u8(stream)){
 					this._playHlsSrc(stream)
 				}else{
 					this.audio.setAttribute('src',stream)
@@ -161,6 +161,11 @@ export default {
 			}else{
 				return false
 			}
+		},
+		//判断是否是m3u8
+		_isM3u8(stream) {
+			let patt = /m3u8$/;
+			return patt.test(stream)
 		},
 		//pc设备通过hls.js插件播放，异步加载hls.js
 		_playHlsSrc(stream){
