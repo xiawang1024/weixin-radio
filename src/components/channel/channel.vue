@@ -14,7 +14,7 @@
 			ref="tabslider"
 			:data="itemsData"
 		>
-			<scroll
+			<!-- <scroll
 				v-for="(group,index) in itemsData"
 				:data="itemsData"
 				:key="index"
@@ -46,6 +46,39 @@
 						</div>
 					</div>
 				</div>
+			</scroll> -->
+			<scroll
+				v-for="(group,index) in itemsData"
+				:data = "group"
+				:scrollbar="true"
+				:pullDownRefresh="true"
+				@pullingDown="onPullingDown"
+				:key="index"
+			>
+				
+			<div class="scroll">
+				<div v-for="item in group" class="items" @click="goToItems(item.cid,item.streams[0])" :class="item.cid == isPlayIndex ? 'isLivePlay' : ''">
+					<div class="icon item">
+						<img :src="'http://program.hndt.com' + item.image" class="img">
+					</div>
+					<div class="live-info item">
+						<p class="name">
+							{{item.name}}
+						</p>
+						<p class="live-name">
+							<i class="icon-LIVE" v-if="item.live"></i>{{item.live}}
+						</p>
+						<p class="live-time">
+							{{item.time}}
+						</p>
+					</div>
+					<div class="play-pause-btn item">
+						<i class="icon-blue" v-if="item.cid == isPlayIndex"></i>
+						<i class="icon-ddd" v-else></i>
+					</div>
+				</div>
+			</div>
+
 			</scroll>
 		</tab-slider>
 	</div>
@@ -54,7 +87,8 @@
 <script>
 import Loading from '@/base/loading'
 import TabSlider from '@/base/tabSlider'
-import Scroll from '@/base/scroll'
+// import Scroll from '@/base/scroll'
+import Scroll from '@/newcomponents/scroll/scroll'
 import Wave from '@/base/wave'
 import Load from '@/components/load/load'
 import {getClassItem} from "api/index"
@@ -114,6 +148,14 @@ export default {
 		},20)
 	},
 	methods:{
+		onPullingDown() {
+			this.loading = true
+			// 更新数据
+			setTimeout(() => {
+				this.loading = false
+				// this.items.unshift('我是新数据: ' + +new Date())
+			}, 1000)
+		},
 		_getClassItem() {
 			var promises = [1,2,3].map((cid) => {
 				return getClassItem(cid).then((res) => {
@@ -139,7 +181,7 @@ export default {
 					this._playHlsSrc(stream)
 				}else{
 					this.audio.setAttribute('src',stream)
-				}
+				}			
 			}
 		},
 		setPlayIndex(index){
