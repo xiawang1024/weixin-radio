@@ -1,7 +1,7 @@
 window.onload = function() {
     var TITLE = '河南广播'
     var LINK = 'http://www.hndt.com/player/wap/index.html'
-    var IMGURL = 'http://www.hndt.com/res/xMoOz951.png'
+    var IMGURL = 'http://hndt.com/res/logo_300.png'
     var DESC = '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源。“听河南，览天下”'
 
     //微信配置
