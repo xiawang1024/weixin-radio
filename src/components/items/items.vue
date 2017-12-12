@@ -19,7 +19,7 @@
 				></span>
 			</div>
 			<div class="item-info" v-if="itemsInfo">
-				<p class="name">{{itemsInfo.name}}</p>
+				<p class="name" id="channel_name">{{itemsInfo.name}}</p>
 				<p class="live-name">
 					<i class="icon-LIVE" v-show="isLivePlay"></i>
 					<span class="playback" v-show="!isLivePlay">回听</span>
@@ -84,6 +84,9 @@ import { getChannelItem, clickItem } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import BScroll from 'better-scroll'
+
+const IMGURL = 'http://hndt.com/res/logo_300.png'
+const DESC = '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源。“听河南，览天下”'
 export default {
 	name:'items',
 	components:{
@@ -121,7 +124,45 @@ export default {
 		}
 		this.watchPlayPercent()
 	},
+	beforeRouteEnter(to,from,next) {
+		
+		
+		next( vm => {
+			vm.href = window.location.href.split('#')[0] + '#' + to.fullPath
+			console.log(vm.href)
+		})
+		
+	},
 	methods:{
+		_share() { //频率页面分享
+			wx.ready(() => {
+				wx.onMenuShareTimeline({
+					title: this.itemsInfo.name, // 分享标题
+					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					imgUrl: IMGURL, // 分享图标
+					success: function() {
+						// 用户确认分享后执行的回调函数
+					},
+					cancel: function() {
+						// 用户取消分享后执行的回调函数
+					}
+				});
+				wx.onMenuShareAppMessage({
+					title: this.itemsInfo.name, // 分享标题
+					desc: DESC, // 分享描述
+					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+					imgUrl: IMGURL, // 分享图标
+					type: '', // 分享类型,music、video或link，不填默认为link
+					dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+					success: function() {
+						// 用户确认分享后执行的回调函数
+					},
+					cancel: function() {
+						// 用户取消分享后执行的回调函数
+					}
+				});
+			})
+		},
 		_getChannelItem(cid) {
 			let todayStamp = this._timeToStamp(this._getToDay());
 			clickItem(cid, todayStamp).then((res) => {
@@ -134,6 +175,7 @@ export default {
 				}
 				setTimeout(() => {
 					this._isPlay(data.programs)
+					this._share()
 				},20)
 			})
 		},
