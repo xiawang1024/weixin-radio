@@ -14,7 +14,7 @@
 					:class="playOrPause ? 'isPlay' : '' "
 				>
 				<span
-					:class=" playOrPause ? 'icon-play' : 'icon-pause'"
+					:class=" playOrPause ? 'icon-pause' : 'icon-play'"
 					@click="playSwitch"
 				></span>
 			</div>
