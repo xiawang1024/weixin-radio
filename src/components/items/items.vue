@@ -19,6 +19,7 @@
 				></span>
 			</div>
 			<div class="item-info" v-if="itemsInfo">
+				<span class="icon-tv">TV</span>
 				<p class="name" id="channel_name">{{itemsInfo.name}}</p>
 				<p class="live-name">
 					<i class="icon-LIVE" v-show="isLivePlay"></i>
@@ -417,8 +418,25 @@ export default {
 				color #1ba2ff
 				opacity 0.8
 		.item-info
+			position relative
 			flex 3
 			text-align left
+			.icon-tv
+				position absolute
+				top 10px
+				right 30px
+				display inline-block
+				padding 4px 10px
+				border 2px solid #0081dc
+				border-radius 4px
+				color #0081dc
+				&:before
+					content: ''
+					position: absolute
+					top: -16px
+					left: -16px
+					right: -16px
+					bottom: -16px
 			p
 				line-height 2
 				&.name
