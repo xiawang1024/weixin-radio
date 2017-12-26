@@ -5,7 +5,7 @@
           <img src="http://program.hndt.com/files/images/2017/06/23/1498188274587475.png" alt="" class="img">
       </div>
       <div class="video-wrap">
-          <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:fill" autoplay></video>
+          <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:cover" autoplay></video>
           <div class="controls">
               <div class="playOrPause">
                   <span
@@ -51,8 +51,13 @@
 </template>
 
 <script>
+import Scroll from '@/base/scroll'
+
 export default {
   name:'live',
+  components:{
+      Scroll
+  },
   data() {
       return {
           liveStream:'http://www.hndt.com/h5/shows/03/videos/1.mp4',
@@ -60,12 +65,23 @@ export default {
           tabBtn:true
       }
   },
+  created() {
+      this._parseQuery()
+  },
   mounted() {
       this.video = document.querySelector('#video')
   },
   methods:{
+      _parseQuery() {
+            let query = this.$route.query
+            let cid = query.cid;
+            this.cid = cid;
+            if(cid){
+                // this._getChannelItem(cid)
+            }
+      },
       goToItem() {
-          this.$router.push({path:'/items',query:{cid:3}})
+          this.$router.push({path:'/items',query:{cid:this.cid}})
       },
       playSwitch() {          
           if(this.video.paused) {
@@ -116,10 +132,12 @@ export default {
     .video-wrap
         position relative
         width 100%
+        height 421px
         overflow hidden
+        background #000000
         // border-1px($color)
         .video-play
-            width 100%
+            width 100%            
         .controls
             position absolute
             left 0
@@ -133,8 +151,8 @@ export default {
                 color #ffffff
     .tab
         width 100%
-        height $items-hd-height
-        line-height $items-hd-height
+        height 100px
+        line-height 100px
         display flex
         justify-content center
         align-items center
@@ -142,14 +160,21 @@ export default {
         .tab-item
             flex 1
             text-align center
-            font-size 38px
+            font-size 34px
             &.z-crt
                 color #0081dc
                 border-bottom 4px solid #0081dc
     .tab-wrap
-        width 100%
+        position fixed
+        top 640px
+        bottom 0
+        left 0
+        right 0
+        width 100%        
         padding 10px 30px
         box-sizing border-box
+        overflow auto
+        -webkit-overflow-scrolling: touch
         .recommend-tab
             .item
                 display flex

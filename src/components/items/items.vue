@@ -19,7 +19,7 @@
 				></span>
 			</div>
 			<div class="item-info" v-if="itemsInfo">
-				<span class="icon-tv">TV</span>
+				<span class="icon-tv" @click="goToLive">TV</span>
 				<p class="name" id="channel_name">{{itemsInfo.name}}</p>
 				<p class="live-name">
 					<i class="icon-LIVE" v-show="isLivePlay"></i>
@@ -352,6 +352,9 @@ export default {
 					}
 				})
 			}
+		},
+		goToLive() {
+			this.$router.push({path:'/live',query:{cid:this.cid}})
 		}
 	}
 }
@@ -424,7 +427,7 @@ export default {
 			.icon-tv
 				position absolute
 				top 10px
-				right 30px
+				right 20px
 				display inline-block
 				padding 4px 10px
 				border 2px solid #0081dc
