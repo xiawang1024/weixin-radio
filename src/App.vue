@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <!-- <transition name="fade" mode="out-in"> -->
+    <transition name="fade" mode="out-in">
       <keep-alive :include="['channel']">
           <router-view></router-view>
       </keep-alive>
-    <!-- </transition> -->
+    </transition>
     <div class="audio-wrap">
     	<audio id="audio" autoplay width="0" height="0"></audio>
     </div>
@@ -31,7 +31,7 @@ export default {
 
 <style scoped lang="stylus">
 .fade-enter-active, .fade-leave-active
-  // transition: opacity .15s
+  transition: opacity 0.1s
 .fade-enter, .fade-leave-to
-  // opctity 0
+  opctity 0
 </style>
