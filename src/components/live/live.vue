@@ -2,7 +2,7 @@
   <div class="live">
       <div class="hd">
           <span class="icon-back back" @click="goToItem"></span>
-          <img src="http://program.hndt.com/files/images/2017/06/23/1498188274587475.png" alt="" class="img">
+          <img :src="channelLogo" alt="" class="img">
       </div>
       <div class="video-wrap">
           <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:cover" autoplay></video>
@@ -52,6 +52,7 @@
 
 <script>
 import Scroll from '@/base/scroll'
+import { getChannelItem } from 'api/index'
 
 export default {
   name:'live',
@@ -60,7 +61,8 @@ export default {
   },
   data() {
       return {
-          liveStream:'http://www.hndt.com/h5/shows/03/videos/1.mp4',
+          channelLogo:'',
+          liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
           playBtn:true,
           tabBtn:true
       }
@@ -77,8 +79,15 @@ export default {
             let cid = query.cid;
             this.cid = cid;
             if(cid){
-                // this._getChannelItem(cid)
+                this._getChannelItem(cid).then((res) => {
+                    let data = res.data
+                    this.channelLogo  = `http://program.hndt.com${data.image}`;
+                    this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'
+                })
             }
+      },
+      _getChannelItem(cid) {
+          return Promise.resolve(getChannelItem(cid))
       },
       goToItem() {
           this.$router.push({path:'/items',query:{cid:this.cid}})
@@ -134,7 +143,7 @@ export default {
         width 100%
         height 421px
         overflow hidden
-        background #000000
+        background #ffffff
         // border-1px($color)
         .video-play
             width 100%            
