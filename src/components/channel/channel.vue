@@ -87,8 +87,7 @@
 <script>
 import Loading from '@/base/loading'
 import TabSlider from '@/base/tabSlider'
-// import Scroll from '@/base/scroll'
-import Scroll from '@/newcomponents/scroll/scroll'
+import Scroll from '@/base/scroll'
 import Wave from '@/base/wave'
 import Load from '@/components/load/load'
 import {getClassItem} from "api/index"

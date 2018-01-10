@@ -11,7 +11,7 @@
 				<img
 					:src="'http://program.hndt.com' + itemsInfo.image"
 					class="img"
-					:class="playOrPause ? 'isPlay' : '' "
+					:class="playOrPause ? '' : 'isPause' "
 				>
 				<span
 					:class=" playOrPause ? 'icon-pause' : 'icon-play'"
@@ -88,6 +88,7 @@ import BScroll from 'better-scroll'
 
 const IMGURL = 'http://hndt.com/res/logo_300.png'
 const DESC = '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源。“听河南，览天下”'
+const PREFIX = 'http://program.hndt.com'
 export default {
 	name:'items',
 	components:{
@@ -140,7 +141,7 @@ export default {
 				wx.onMenuShareTimeline({
 					title: this.itemsInfo.name, // 分享标题
 					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: IMGURL, // 分享图标
+					imgUrl: FREFIX + this.itemsInfo.image, // 分享图标
 					success: function() {
 						// 用户确认分享后执行的回调函数
 					},
@@ -150,9 +151,9 @@ export default {
 				});
 				wx.onMenuShareAppMessage({
 					title: this.itemsInfo.name, // 分享标题
-					desc: DESC, // 分享描述
+					desc: this.itemsInfo.description, // 分享描述
 					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: IMGURL, // 分享图标
+					imgUrl: FREFIX + this.itemsInfo.image, // 分享图标
 					type: '', // 分享类型,music、video或link，不填默认为link
 					dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 					success: function() {
@@ -354,7 +355,8 @@ export default {
 			}
 		},
 		goToLive() {
-			this.$router.push({path:'/live',query:{cid:this.cid}})
+			this.$toasted.show('hello billo',{className:'.toast'})
+			// this.$router.push({path:'/live',query:{cid:this.cid}})
 		}
 	}
 }
@@ -362,11 +364,16 @@ export default {
 
 <style scoped lang="stylus">
 @import '~common/stylus/mixin.styl'
+
 @keyframes rotate
     0%
         transform rotate(0deg)
     100%
         transform rotate(360deg)
+.toast
+	width 200px
+	height 60px
+	background #f0f
 .items
 	width 100%
 	background #fff
@@ -410,8 +417,9 @@ export default {
 				height 240px
 				border-radius 50%
 				border 2px solid $color
-				&.isPlay
-					animation rotate 6s linear infinite
+				animation rotate 6s linear infinite
+				&.isPause
+					animation-play-state:paused					
 			.icon-play,.icon-pause
 				position: absolute
 				left 50%
