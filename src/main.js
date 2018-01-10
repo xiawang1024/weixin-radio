@@ -6,16 +6,11 @@ import router from './router'
 import fastclick from 'fastclick'
 import axios from 'axios'
 import Qs from 'qs'
-import Toasted from 'vue-toasted'
 import "@/common/js/flexible.js"
 import '@/common/stylus/index.styl'
 
 fastclick.attach(document.body)
 
-Vue.use(Toasted,{
-  duration:300000,
-  position:'bottom-center'
-})
 
 var TITLE = '河南广播'
 var LINK = 'http://www.hndt.com/player/wap/index.html'

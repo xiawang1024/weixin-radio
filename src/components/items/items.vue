@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="itemsList" v-show="itemsList.length">
-			<div class="title">节目列表</div>
+			<div class="title">回听</div>
 			<keep-alive>
 				<date-pick
 					@clickItem="getDatePrograms"
@@ -71,6 +71,7 @@
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
 		</div>
+		<toast :msg="msg" :isShowToast="isShowToast"></toast>
 	</div>
 </template>
 
@@ -81,6 +82,8 @@ import Scroll from '@/base/scroll'
 import DatePick from '@/base/datePick'
 import ProgressBar from '@/base/progress-bar'
 import Load from '@/components/load/load'
+import Toast from '@/base/toast'
+
 import { getChannelItem, clickItem } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
@@ -95,7 +98,8 @@ export default {
 		Scroll,
 		Load,
 		DatePick,
-		ProgressBar
+		ProgressBar,
+		Toast
 	},
 	data() {
 		return {
@@ -109,7 +113,9 @@ export default {
 			playBackTitle:'',//回听栏目title
 			percent:0, //播放百分比
 			currentTime:0, //当前播放时间
-			duration:0 //播放总时间
+			duration:0, //播放总时间
+			msg:'', //toast提示
+			isShowToast:false //是否显示toast
 		}
 	},
 	created() {
@@ -354,8 +360,13 @@ export default {
 				})
 			}
 		},
-		goToLive() {
-			this.$toasted.show('hello billo',{className:'.toast'})
+		goToLive() {			
+			this.msg = '暂未开放视频！'
+			this.isShowToast = true
+			setTimeout(() => {
+				this.isShowToast = false
+			}, 3000);
+			//暂不开放视频直播页面
 			// this.$router.push({path:'/live',query:{cid:this.cid}})
 		}
 	}
