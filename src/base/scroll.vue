@@ -43,8 +43,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import BScroll from '../../../src/index'
-    import BScroll from 'better-scroll'
+  
+  import BScroll from 'better-scroll'
   import Loading from './loading'
   import Bubble from './bubble'
 

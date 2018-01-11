@@ -44,8 +44,8 @@
 		<div class="tab-item">
 			<div class="item" :class="{'z-crt':tabIndex == 0}" @click="tabSwitch(0)"><i class="icon-back-listen"></i><span>回听</span></div>
 			<div class="item" :class="{'z-crt':tabIndex == 1}" @click="tabSwitch(1)"><i class="icon-comment"></i><span>互动</span></div>
-		</div>
-		<div class="itemsList">
+		</div>		
+		<div class="itemsList" v-show="tabIndex == 0">
 			<!-- <div class="title">回听</div> -->
 			<keep-alive>
 				<date-pick
@@ -72,6 +72,11 @@
 				</div>
 			</scroll>
 		</div>
+		<comment-list 
+			ref="child"
+			v-show="tabIndex == 1" 
+			:commentList="itemsList"
+		></comment-list>
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
 		</div>
@@ -87,11 +92,11 @@ import DatePick from '@/base/datePick'
 import ProgressBar from '@/base/progress-bar'
 import Load from '@/components/load/load'
 import Toast from '@/base/toast'
+import CommentList from '@/base/comment-list'
 
 import { getChannelItem, clickItem } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
-import BScroll from 'better-scroll'
 
 const IMGURL = 'http://hndt.com/res/logo_300.png'
 const DESC = '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源。“听河南，览天下”'
@@ -103,7 +108,8 @@ export default {
 		Load,
 		DatePick,
 		ProgressBar,
-		Toast
+		Toast,
+		CommentList
 	},
 	data() {
 		return {
@@ -368,6 +374,9 @@ export default {
 		//tab切换
 		tabSwitch (index) {
 			this.tabIndex = index
+			this.$nextTick(() => {
+				this.$refs.child.refresh()
+			})			
 		},
 		goToLive() {			
 			this.msg = '暂未开放视频！'
