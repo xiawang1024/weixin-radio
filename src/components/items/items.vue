@@ -41,8 +41,12 @@
 				</p>
 			</div>
 		</div>
-		<div class="itemsList" v-show="itemsList.length">
-			<div class="title">回听</div>
+		<div class="tab-item">
+			<div class="item" :class="{'z-crt':tabIndex == 0}" @click="tabSwitch(0)"><i class="icon-back-listen"></i><span>回听</span></div>
+			<div class="item" :class="{'z-crt':tabIndex == 1}" @click="tabSwitch(1)"><i class="icon-comment"></i><span>互动</span></div>
+		</div>
+		<div class="itemsList">
+			<!-- <div class="title">回听</div> -->
 			<keep-alive>
 				<date-pick
 					@clickItem="getDatePrograms"
@@ -115,7 +119,8 @@ export default {
 			currentTime:0, //当前播放时间
 			duration:0, //播放总时间
 			msg:'', //toast提示
-			isShowToast:false //是否显示toast
+			isShowToast:false, //是否显示toast
+			tabIndex:0 //tab切换index
 		}
 	},
 	created() {
@@ -360,6 +365,10 @@ export default {
 				})
 			}
 		},
+		//tab切换
+		tabSwitch (index) {
+			this.tabIndex = index
+		},
 		goToLive() {			
 			this.msg = '暂未开放视频！'
 			this.isShowToast = true
@@ -496,8 +505,30 @@ export default {
 						right -24px
 						top 24px
 						font-size 24px
+	.tab-item
+		display flex
+		align-items center
+		width 100%
+		height $items-items-title
+		border-1px($color)
+		padding 0 20px
+		box-sizing border-box
+		font-size 28px
+		font-weight 500
+		.item
+			padding 20px
+			color #333333		
+			&.z-crt
+				color #0081dc	
+			i 				
+				font-size 38px
+				vertical-align middle
+				margin-right 2px	
+			span
+				vertical-align middle	
 	.itemsList
 		width 100%
+		overflow hidden
 		.title
 			width 100%
 			height $items-items-title
