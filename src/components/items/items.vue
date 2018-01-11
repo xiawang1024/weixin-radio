@@ -54,9 +54,7 @@
 			</keep-alive>
 			<scroll
 				class="list-wrap"
-				:data="itemsList"	
-				:pullDownRefresh="pullDownRefresh"	
-				@pullingDown="onPullingDown"					
+				:data="itemsList"									
 				ref="listview"
 			>
 				<div>
@@ -76,9 +74,8 @@
 		</div>
 		<comment-list 
 			ref="child"
-			v-show="tabIndex == 1" 
-			:commentList="itemsList"
-			:pullDownRefresh="true"
+			:cid="itemsInfo && itemsInfo.cid"
+			v-show="tabIndex == 1" 			
 		></comment-list>
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
@@ -97,7 +94,7 @@ import Load from '@/components/load/load'
 import Toast from '@/base/toast'
 import CommentList from '@/base/comment-list'
 
-import { getChannelItem, clickItem } from 'api/index'
+import { getChannelItem, clickItem, getCommentList } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 
@@ -129,16 +126,11 @@ export default {
 			duration:0, //播放总时间
 			msg:'', //toast提示
 			isShowToast:false, //是否显示toast
-			tabIndex:0, //tab切换index
-			pullDownRefresh:{
-				txt:'更新成功',
-                stop:80,
-                threshold:100
-			}
+			tabIndex:0 //tab切换index			
 		}
 	},
 	created() {
-		this.parseQuery()
+		this.parseQuery()		
 	},
 	mounted() {
 		this.audio = document.getElementById('audio')
@@ -385,7 +377,7 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.child.refresh()
 			})			
-		},
+		},		
 		goToLive() {			
 			this.msg = '暂未开放视频！'
 			this.isShowToast = true
@@ -394,9 +386,6 @@ export default {
 			}, 3000);
 			//暂不开放视频直播页面
 			// this.$router.push({path:'/live',query:{cid:this.cid}})
-		},
-		onPullingDown() {
-			this.parseQuery()
 		},
 	}
 }
