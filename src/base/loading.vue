@@ -25,10 +25,10 @@
   margin-top 200px
   .img
     display inline-block
-    width 80px
-    height 80px
+    width 60px
+    height 60px
   .desc
-    line-height: 80px
+    line-height: 60px
     font-size: 28px
     color: #000
 </style>
