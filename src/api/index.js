@@ -25,9 +25,19 @@ const getChannelItem = (channelId) => axios.get('/get/live/channel/' + channelId
  * @return {[type]}           [description]
  */
 const clickItem = (channelId,time) => axios.get('/get/vod/' + channelId + '/' + time)
+
+const getCommentList = (id,toId=-1,page=1) => axios.get('http://talk.hndt.com/hngbWeb/api/comment/showCommentforPage.do?',{
+	params:{
+		id,
+		toId,
+		page
+	}
+})
+
 export {
 	getLiveItem,
 	getClassItem,
 	getChannelItem,
-	clickItem
+	clickItem,
+	getCommentList
 }
