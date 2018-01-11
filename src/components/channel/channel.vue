@@ -51,7 +51,7 @@
 				v-for="(group,index) in itemsData"
 				:data = "group"
 				:scrollbar="true"
-				:pullDownRefresh="true"
+				
 				@pullingDown="onPullingDown"
 				:key="index"
 			>

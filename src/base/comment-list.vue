@@ -3,6 +3,8 @@
         <scroll
             ref="scroll"
             :data="commentList"
+            :pullDownRefresh = "pullDownRefresh"
+            :pullUpLoad = "pullUpLoad"
         >            
             <div class="list" v-for="item of commentList">{{item}}</div>            
         </scroll>
@@ -29,6 +31,14 @@ export default {
             default:function () {
                 return []
             }
+        },
+        pullDownRefresh:{
+            type:Boolean,
+            default:true
+        },
+        pullUpLoad:{
+            type:Boolean,
+            default:true
         }
     },
     methods:{

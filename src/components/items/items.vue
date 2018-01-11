@@ -54,7 +54,9 @@
 			</keep-alive>
 			<scroll
 				class="list-wrap"
-				:data="itemsList"
+				:data="itemsList"	
+				:pullDownRefresh="pullDownRefresh"	
+				@pullingDown="onPullingDown"					
 				ref="listview"
 			>
 				<div>
@@ -76,6 +78,7 @@
 			ref="child"
 			v-show="tabIndex == 1" 
 			:commentList="itemsList"
+			:pullDownRefresh="true"
 		></comment-list>
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
@@ -126,7 +129,12 @@ export default {
 			duration:0, //播放总时间
 			msg:'', //toast提示
 			isShowToast:false, //是否显示toast
-			tabIndex:0 //tab切换index
+			tabIndex:0, //tab切换index
+			pullDownRefresh:{
+				txt:'更新成功',
+                stop:80,
+                threshold:100
+			}
 		}
 	},
 	created() {
@@ -386,7 +394,10 @@ export default {
 			}, 3000);
 			//暂不开放视频直播页面
 			// this.$router.push({path:'/live',query:{cid:this.cid}})
-		}
+		},
+		onPullingDown() {
+			this.parseQuery()
+		},
 	}
 }
 </script>
