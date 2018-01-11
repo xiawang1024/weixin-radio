@@ -303,5 +303,5 @@
     display: flex
     justify-content center
     align-items center
-    padding: 30px 0 60px
+    padding: 30px 0 30px
 </style>

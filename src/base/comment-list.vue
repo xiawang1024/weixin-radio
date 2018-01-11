@@ -4,7 +4,9 @@
             ref="scroll"
             :data="commentList"
             :pullDownRefresh = "pullDownRefresh"
+            :pullUpLoad="pullUpLoad"
             @pullingDown = "onPullingDown"
+            @pullingUp="onPullingUp"
         >            
             <div class="list" v-for="item of commentList" :key="item.id">
                 <img :src="item.icon || defaultAvatar" alt="" class="avatar">
@@ -35,11 +37,19 @@ export default {
         return {
             defaultAvatar:require('./default-avatar.png'),
             commentList:[],
+            listLen:1,
 			pullDownRefresh:{
 				txt:'更新成功',
                 stop:60,
                 threshold:80
-			}
+            },
+            pullUpLoad:{
+                txt:{
+                    more:'玩命加载中',
+                    noMore:'没有更多数据'
+                },
+                threshold:0
+            },
         }
     },
     props:{
@@ -48,6 +58,7 @@ export default {
             default:''
         }
     },
+   
     created () {
         if(this.cid) {
             this._getCommentList(this.cid)
@@ -71,9 +82,20 @@ export default {
 				}
 			})
 		},
-		onPullingDown() {
+		onPullingDown () {
 			this._getCommentList(this.cid)
-		},
+        },
+        onPullingUp () {
+            this.listLen++;
+            getCommentList(this.cid,-1,this.listLen).then((res) => {
+                let data = res.data
+                if(data.result) {
+                    this.commentList = this.commentList.concat(data.result.list)
+                }else{
+                    this.$refs.scroll.forceUpdate(false)
+                }
+            })        
+        }
     }
 }
 </script>
