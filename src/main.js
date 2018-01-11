@@ -6,6 +6,7 @@ import router from './router'
 import fastclick from 'fastclick'
 import axios from 'axios'
 import Qs from 'qs'
+import filter from './filter/index'
 import "@/common/js/flexible.js"
 import '@/common/stylus/index.styl'
 
@@ -66,6 +67,7 @@ router.beforeEach((to,from,next) => {
 new Vue({
   el: '#app',
   router,
+  filter,
   template: '<App/>',
   components: { App }
 })
