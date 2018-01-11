@@ -1,34 +1,19 @@
 <template>
-  <div class="loading">
-    <img class="img" src="./loading.gif">
-    <p class="desc">{{title}}</p>
+  <div class="mf-loading-container">
+    <img src="./loading.gif">
   </div>
 </template>
 <script type="text/ecmascript-6">
+  const COMPONENT_NAME = 'loading'
   export default {
-    props: {
-      title: {
-        type: String,
-        default: '玩命加载...'
-      }
-    }
+    name: COMPONENT_NAME
   }
 </script>
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
 @import '~common/stylus/mixin.styl'
-.loading
-  position relative
-  z-index 100
-  width: 100%
-  text-align: center
-  font-size 0
-  margin-top 200px
-  .img
-    display inline-block
-    width 60px
-    height 60px
-  .desc
-    line-height: 60px
-    font-size: 28px
-    color: #000
+.mf-loading-container
+    img
+        width: 50px
+        height: 50px
+        display: block
 </style>

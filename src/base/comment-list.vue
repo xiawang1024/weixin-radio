@@ -37,7 +37,8 @@ export default {
         return {
             defaultAvatar:require('./default-avatar.png'),
             commentList:[],
-            listLen:1,
+            pageIndex:1,
+            listLen:0,
 			pullDownRefresh:{
 				txt:'更新成功',
                 stop:60,
@@ -78,6 +79,7 @@ export default {
 			return getCommentList(id).then((res) => {
 				let data = res.data
 				if(data.success) {
+                    this.listLen = data.result.pages-1
 					this.commentList = data.result.list
 				}
 			})
@@ -86,13 +88,14 @@ export default {
 			this._getCommentList(this.cid)
         },
         onPullingUp () {
-            this.listLen++;
-            getCommentList(this.cid,-1,this.listLen).then((res) => {
+            this.pageIndex++;
+            getCommentList(this.cid,-1,this.pageIndex).then((res) => {
                 let data = res.data
+                
                 if(data.result) {
                     this.commentList = this.commentList.concat(data.result.list)
                 }else{
-                    this.$refs.scroll.forceUpdate(false)
+                    this.$refs.scroll.forceUpdate()
                 }
             })        
         }

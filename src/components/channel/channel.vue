@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import Loading from '@/base/loading'
+import Loading from '@/base/gloading'
 import TabSlider from '@/base/tabSlider'
 import Scroll from '@/base/scroll'
 import Wave from '@/base/wave'
