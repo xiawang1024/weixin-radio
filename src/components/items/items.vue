@@ -158,7 +158,7 @@ export default {
 				wx.onMenuShareTimeline({
 					title: this.itemsInfo.name, // 分享标题
 					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: FREFIX + this.itemsInfo.image, // 分享图标
+					imgUrl: PREFIX + this.itemsInfo.image, // 分享图标
 					success: function() {
 						// 用户确认分享后执行的回调函数
 					},
@@ -373,7 +373,7 @@ export default {
 		},
 		//tab切换 回听/互动
 		tabSwitch (index) {
-			var arr = [117,118,120]			
+			var arr = [119,118,120]			
 			if(index == 1) {
 				if(arr.indexOf(parseInt(this.itemsInfo.cid)) != -1){
 					this.tabIndex = index
