@@ -1,6 +1,7 @@
 <template>
     <div class="comment-list">
         <scroll
+            class="list-wrap"
             ref="scroll"
             :data="commentList"
             :pullDownRefresh = "pullDownRefresh"
@@ -19,19 +20,26 @@
                 </div>
             </div>            
         </scroll>
+        <div class="send-wrap" @click="tips">
+            <input type="text" class="ipt" placeholder="我想说..." disabled>
+            <button class="btn">发送</button>
+        </div>
+        <toast :isShowToast="isShowToast" :msg="msg"></toast>
     </div>
 </template>
 
 
 <script>
 import Scroll from '@/base/scroll'
+import Toast from './toast.vue'
 
 import { getCommentList } from 'api/index'
 
 export default {
     name:'comment-list',
     components:{
-       Scroll 
+       Scroll,
+       Toast
     },
     data () {
         return {
@@ -51,6 +59,8 @@ export default {
                 },
                 threshold:0
             },
+            isShowToast:false,
+            msg:'暂未开通评论'
         }
     },
     props:{
@@ -98,6 +108,13 @@ export default {
                     this.$refs.scroll.forceUpdate()
                 }
             })        
+        },
+        tips() {
+            this.msg = '请下载河南广播APP体验更多功能！'
+            this.isShowToast = true
+            setTimeout(() => {
+                this.isShowToast = false
+            }, 3000);
         }
     }
 }
@@ -113,37 +130,71 @@ export default {
     left 0
     right 0
     overflow hidden
-    .list
-        display flex
-        width 100%
-        padding 20px
-        margin-bottom 10px
-        box-sizing border-box
-        // border-1px($color)
-        .avatar 
-            display block
-            width 80px
-            height 80px
-            border-radius 50%
-        .text-wrap
-            position relative
-            flex 1
-            margin-left 30px
-            padding-right 20px
+    .list-wrap
+        position absolute
+        top 0
+        bottom 100px
+        left 0
+        right 0
+        overflow hidden
+        .list
+            display flex
+            width 100%
+            padding 20px
+            margin-bottom 10px
             box-sizing border-box
-            .time
-                position absolute
-                top 0
-                right 0
-                font-size 22px
-                color #999999
-            .name
-                font-size 26px
-                font-weight 500
-                color #666666
-            .content
-                margin-top 30px
-                line-height 1.6125
-                font-size 30px
-                color #000000
+            // border-1px($color)
+            .avatar 
+                display block
+                width 80px
+                height 80px
+                border-radius 50%
+            .text-wrap
+                position relative
+                flex 1
+                margin-left 30px
+                padding-right 20px
+                box-sizing border-box
+                .time
+                    position absolute
+                    top 0
+                    right 0
+                    font-size 22px
+                    color #999999
+                .name
+                    font-size 26px
+                    font-weight 500
+                    color #666666
+                .content
+                    margin-top 30px
+                    line-height 1.6125
+                    font-size 30px
+                    color #000000
+    .send-wrap
+        display flex
+        align-items center
+        justify-content space-around
+        position absolute
+        bottom 0
+        left 0
+        right 0
+        height 90px
+        background #ffffff
+        border-top 1px solid $color
+        .ipt
+            width 500px
+            height 70px
+            border 1px solid $color
+            border-radius 80px
+            padding-left 40px
+            box-sizing border-box
+            font-size 30px
+        .btn
+            width 160px
+            height 60px
+            background #0081dc
+            color #ffffff
+            font-size 30px
+            border none
+            border-radius 8px
 </style>

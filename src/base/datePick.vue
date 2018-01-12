@@ -102,13 +102,13 @@ export default {
 	    	// 	dateWidth = childrens[0].clientWidth + 1;
 	    	// }
 				// console.log(dateWidth)
-				dateWidth = document.getElementsByTagName('html')[0].style.fontSize;
+			dateWidth = document.getElementsByTagName('html')[0].style.fontSize;
 	    	this.dateWrapWidth = parseFloat(dateWidth) * 2 * 31;
 	    	dateWrap.style.width = Math.ceil(this.dateWrapWidth) + 'px';
 				// console.log(this.dateWrapWidth)
 	    },
 	    scrollTo() {
-	    	this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,800)
+	    	this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,650)
 	    },
 	    refresh() {
             this.slider && this.slider.refresh()

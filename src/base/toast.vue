@@ -55,6 +55,7 @@ export default {
         justify-content space-around
         padding 20px 30px
         border-radius 6px
+        line-height 1.6125
         font-size 28px
         color #ffffff
         background rgba(0,0,0,.75)

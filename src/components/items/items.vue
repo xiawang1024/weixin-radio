@@ -371,22 +371,34 @@ export default {
 				})
 			}
 		},
-		//tab切换
+		//tab切换 回听/互动
 		tabSwitch (index) {
-			this.tabIndex = index
-			this.$nextTick(() => {
-				this.$refs.child.refresh()
-			})			
+			var arr = [117,118,120]			
+			if(index == 1) {
+				if(arr.indexOf(parseInt(this.itemsInfo.cid)) != -1){
+					this.tabIndex = index
+					this.$nextTick(() => {
+						this.$refs.child.refresh()
+					})	
+				}else{
+					this._toast('评论未开通！')
+				}		
+			}else {
+				this.tabIndex = index
+			}	
 		},		
-		goToLive() {			
-			this.msg = '暂未开放视频！'
+		goToLive() {						
+			this._toast('视频功能暂未开放！')
+			//暂不开放视频直播页面
+			// this.$router.push({path:'/live',query:{cid:this.cid}})
+		},
+		_toast (msg) {
+			this.msg = msg
 			this.isShowToast = true
 			setTimeout(() => {
 				this.isShowToast = false
 			}, 3000);
-			//暂不开放视频直播页面
-			// this.$router.push({path:'/live',query:{cid:this.cid}})
-		},
+		}
 	}
 }
 </script>
