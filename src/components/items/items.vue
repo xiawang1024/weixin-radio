@@ -170,7 +170,7 @@ export default {
 					title: this.itemsInfo.name, // 分享标题
 					desc: this.itemsInfo.description, // 分享描述
 					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: FREFIX + this.itemsInfo.image, // 分享图标
+					imgUrl: PREFIX + this.itemsInfo.image, // 分享图标
 					type: '', // 分享类型,music、video或link，不填默认为link
 					dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 					success: function() {
