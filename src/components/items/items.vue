@@ -194,6 +194,7 @@ export default {
 				}else{
 					this.liveStream = data.streams[0];
 				}
+				//1061 bug兼容end
 				if(!this.audio.getAttribute('src')){
 					this._playSrc(this.liveStream)					
 				}
