@@ -188,9 +188,14 @@ export default {
 				let data = res.data;
 				this.itemsInfo = data;
 				this.itemsList = data.programs;
-				this.liveStream = data.streams[0];
+				//1061 bug兼容
+				if(cid == 120) {
+					this.liveStream = 'http://stream.hndt.com:1935/live/1061aacv2-64k/playlist.m3u8'
+				}else{
+					this.liveStream = data.streams[0];
+				}
 				if(!this.audio.getAttribute('src')){
-					this._playSrc(data.streams[0])
+					this._playSrc(this.liveStream)					
 				}
 				setTimeout(() => {
 					this._isPlay(data.programs)
