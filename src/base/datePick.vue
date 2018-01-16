@@ -108,7 +108,7 @@ export default {
 				// console.log(this.dateWrapWidth)
 	    },
 	    scrollTo() {
-	    	this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,650)
+	    	this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,1000)
 	    },
 	    refresh() {
             this.slider && this.slider.refresh()
