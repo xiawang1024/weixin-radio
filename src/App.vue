@@ -31,7 +31,7 @@ export default {
 
 <style scoped lang="stylus">
 .fade-enter-active, .fade-leave-active
-  transition: opacity 0.1s
+  transition: opacity 0.25s
 .fade-enter, .fade-leave-to
   opctity 0
 </style>

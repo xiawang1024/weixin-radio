@@ -104,6 +104,10 @@
       freeScroll: {
         type: Boolean,
         default: false
+      },
+      mouseWheel:{
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -152,7 +156,8 @@
           pullDownRefresh: this.pullDownRefresh,
           pullUpLoad: this.pullUpLoad,
           startY: this.startY,
-          freeScroll: this.freeScroll
+          freeScroll: this.freeScroll,
+          mouseWheel: this.mouseWheel
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "better-scroll": "^1.6.2",
+    "better-scroll": "^1.8.0",
     "fastclick": "^1.0.6",
     "hls.js": "^0.7.11",
     "vue": "^2.3.3",

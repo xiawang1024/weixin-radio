@@ -14,39 +14,7 @@
 			ref="tabslider"
 			:data="itemsData"
 		>
-			<!-- <scroll
-				v-for="(group,index) in itemsData"
-				:data="itemsData"
-				:key="index"
-			>
-				<div class="scroll">
-					<div
-						v-for="item in group"
-						class="items"
-						@click="goToItems(item.cid,item.streams[0])"
-						:class="item.cid == isPlayIndex ? 'isLivePlay' : ''"
-					>
-						<div class="icon item">
-							<img :src="'http://program.hndt.com' + item.image" class="img">
-						</div>
-						<div class="live-info item">
-							<p class="name">
-								{{item.name}}
-							</p>
-							<p class="live-name">
-								<i class="icon-LIVE" v-if="item.live"></i>{{item.live}}
-							</p>
-							<p class="live-time">
-								{{item.time}}
-							</p>
-						</div>
-						<div class="play-pause-btn item">
-							<i class="icon-blue" v-if="item.cid == isPlayIndex"></i>
-							<i class="icon-ddd" v-else></i>
-						</div>
-					</div>
-				</div>
-			</scroll> -->
+			
 			<scroll
 				v-for="(group,index) in itemsData"
 				:data = "group"
