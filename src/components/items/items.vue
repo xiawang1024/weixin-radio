@@ -378,7 +378,7 @@ export default {
 		},
 		//tab切换 回听/互动
 		tabSwitch (index) {
-			var arr = [119,118,120]			
+			var arr = [119,117,120]			
 			if(index == 1) {
 				if(arr.indexOf(parseInt(this.itemsInfo.cid)) != -1){
 					this.tabIndex = index
