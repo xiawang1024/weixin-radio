@@ -3,10 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
+
+
 import fastclick from 'fastclick'
 import axios from 'axios'
 import Qs from 'qs'
-import filter from './filter/index'
+import filter from './filter'
+
+
 import "@/common/js/flexible.js"
 import '@/common/stylus/index.styl'
 
@@ -63,11 +68,14 @@ router.beforeEach((to,from,next) => {
   }
   next()
 })
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   filter,
+  store,
   template: '<App/>',
   components: { App }
 })
