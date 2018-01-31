@@ -44,9 +44,9 @@
 		<div class="tab-item">
 			<div class="item" :class="{'z-crt':tabIndex == 0}" @click="tabSwitch(0)"><i class="icon-back-listen"></i><span>回听</span></div>
 			<div class="item" :class="{'z-crt':tabIndex == 1}" @click="tabSwitch(1)"><i class="icon-comment"></i><span>互动</span></div>
-		</div>		
-		<div class="itemsList" v-show="tabIndex == 0">
-			<!-- <div class="title">回听</div> -->
+		</div>	
+		<!-- 回听start	 -->
+		<div class="itemsList" v-show="tabIndex == 0">			
 			<keep-alive>
 				<date-pick
 					@clickItem="getDatePrograms"
@@ -58,7 +58,7 @@
 				ref="listview"
 			>
 				<div>
-					<div class="list" v-for='(item, index) in itemsList' ref="list">
+					<div class="list" v-for='(item, index) in itemsList' ref="list" :key="item.beginTime">
 						<span class="item time">{{format(item.beginTime)}} - {{format(item.endTime)}}</span>
 						<span class="item name">{{item.title}}</span>
 						<span
@@ -72,11 +72,14 @@
 				</div>
 			</scroll>
 		</div>
+		<!-- 回听end -->
+		<!-- 互动start -->
 		<comment-list 
 			ref="child"
 			:cid="itemsInfo && itemsInfo.cid"
 			v-show="tabIndex == 1" 			
 		></comment-list>
+		<!-- 互动end -->
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
 		</div>
@@ -88,7 +91,7 @@
 // const Hls = r => require.ensure([], () => r(require('hls'))) //如果是电脑端，则加载hls，否则不加载
 // import Hls from 'hls'
 import Scroll from '@/base/scroll'
-import DatePick from '@/base/datePick'
+import DatePick from '@/base/datePick/datePick'
 import ProgressBar from '@/base/progress-bar'
 import Load from '@/components/load/load'
 import Toast from '@/base/toast'
