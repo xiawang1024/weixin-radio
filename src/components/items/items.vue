@@ -202,7 +202,7 @@ export default {
 				}
 				setTimeout(() => {
 					this._isPlay(data.programs)
-					this._share()
+					// this._share()
 				},20)
 			})
 		},

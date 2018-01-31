@@ -18,6 +18,7 @@ export default {
     WxAudio
   },
   mounted() {
+    console.log(this.$router)
   	this.audio = document.getElementById('audio');
     var me = this
   	this.canPlay = true
