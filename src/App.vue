@@ -5,15 +5,18 @@
           <router-view></router-view>
       </keep-alive>
     </transition>
-    <div class="audio-wrap">
-    	<audio id="audio" autoplay width="0" height="0"></audio>
-    </div>
+    <wx-audio></wx-audio>
   </div>
 </template>
 
 <script>
+import WxAudio from '@/base/audio'
+
 export default {
   name: 'app',
+  components:{
+    WxAudio
+  },
   mounted() {
   	this.audio = document.getElementById('audio');
     var me = this
