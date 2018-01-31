@@ -53,13 +53,14 @@
 </template>
 
 <script>
-import Loading from '@/base/gloading'
-import TabSlider from '@/base/tabSlider'
-import Scroll from '@/base/scroll'
-import Wave from '@/base/wave'
-import Load from '@/components/load/load'
-import {getClassItem} from "api/index"
 import BScroll from 'better-scroll'
+import Loading from '@/base/gLoading/gLoading'
+import TabSlider from '@/base/tabSlider/tabSlider'
+import Scroll from '@/base/scroll/scroll'
+import Wave from '@/base/wave/wave'
+import Load from '@/components/load/load'
+
+import {getClassItem} from "api/index"
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 
 const TAB_ARR = ['河南台','网络台','市县台']

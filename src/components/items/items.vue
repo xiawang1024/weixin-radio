@@ -90,12 +90,12 @@
 <script>
 // const Hls = r => require.ensure([], () => r(require('hls'))) //如果是电脑端，则加载hls，否则不加载
 // import Hls from 'hls'
-import Scroll from '@/base/scroll'
+import Scroll from '@/base/scroll/scroll'
 import DatePick from '@/base/datePick/datePick'
-import ProgressBar from '@/base/progress-bar'
+import ProgressBar from '@/base/progressBar/progressBar'
 import Load from '@/components/load/load'
-import Toast from '@/base/toast'
-import CommentList from '@/base/comment-list'
+import Toast from '@/base/toast/toast'
+import CommentList from '@/base/commentList/commentList'
 
 import { getChannelItem, clickItem, getCommentList } from 'api/index'
 import { addClass } from 'common/js/dom.js'

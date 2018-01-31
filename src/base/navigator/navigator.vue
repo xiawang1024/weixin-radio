@@ -86,10 +86,7 @@
         let translate = middleTranslate - width
         translate = Math.max(minTranslate, Math.min(0, translate))
         this.$refs.scroll.scrollTo(translate, 0, 300)
-      },
-      scrollTo() {
-            this.slider && this.slider.scrollTo(-this.dateWrapWidth,0,1000)
-        },
+      }
     },
     components: {
       Scroll

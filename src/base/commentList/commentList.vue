@@ -30,8 +30,8 @@
 
 
 <script>
-import Scroll from '@/base/scroll'
-import Toast from './toast.vue'
+import Scroll from '@/base/scroll/scroll'
+import Toast from '@/base/toast/toast.vue'
 
 import { getCommentList } from 'api/index'
 

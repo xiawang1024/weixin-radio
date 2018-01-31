@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import WxAudio from '@/base/audio'
+import WxAudio from '@/base/audio/audio'
 
 export default {
   name: 'app',

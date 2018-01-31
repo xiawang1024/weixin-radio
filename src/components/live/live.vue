@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import Scroll from '@/base/scroll'
+import Scroll from '@/base/scroll/scroll'
 import { getChannelItem } from 'api/index'
 
-import CommentList from '@/base/comment-list'
-import Toast from '@/base/toast.vue'
+import CommentList from '@/base/commentList/commentList'
+import Toast from '@/base/toast/toast.vue'
 
 export default {
   name:'live',

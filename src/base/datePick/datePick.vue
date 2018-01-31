@@ -3,7 +3,7 @@
         <navigator
             direction="horizontal" 
             :navList="dateArray" 
-            currentTabInde="currentTabIndex" 
+            :currentTabIndex="currentDateIndex" 
             @change="getDatePrograms"
         >
            
@@ -25,6 +25,7 @@
 <script>
 import Navigator from '@/base/navigator/navigator'
 
+import { _pad } from '@/common/js/util'
 
 export default {
     name:'date-pick',
@@ -33,27 +34,16 @@ export default {
     },
 	data() {
 		return {
-            currentDateIndex:31,
-            startX:1000         
+            currentDateIndex:30     
 		}
-	},
-	mounted() {
-		
-	},
+	},	
 	computed:{
 		dateArray() {
 			let dateArr = this._getDateArray(30)
 			this.currentDateIndex = dateArr.length - 1;
 			return dateArr
 		}
-	},
-	watch:{
-		dateArray() {
-			setTimeout(() => {
-				this.slider.refresh()
-			},20)
-		}
-	},
+	},	
 	methods:{
 		_getDateArray(n) {
 	    	let today = new Date(); //获取今天日期
@@ -64,22 +54,14 @@ export default {
 			for (var i = 0; i <= n; i++) {
                 let dateTemp = {}
                 let id = i+1;
-                let date = this._pad((today.getMonth()+1))+"-"+ this._pad(today.getDate())
+                let date = _pad((today.getMonth()+1))+"-"+ _pad(today.getDate())
                 let week = weeks[today.getDay()]
                 dateTemp = {id,date,week}
 			    dateArray.push(dateTemp);
 			    today.setDate(today.getDate() + step);
 			}
 			return dateArray
-	    },
-	    _pad(num, n = 2) {
-	        let len = num.toString().length
-	        while (len < n) {
-	          num = '0' + num
-	          len++
-	        }
-	        return num
-	    },
+	    },	   
         getDatePrograms(item){
             let index = item.id - 1;
         	this.currentDateIndex = index; //选中
@@ -97,8 +79,7 @@ export default {
     top $items-list-date-top
     left 0
     right 0
-    // height $items-date-height
-    bottom 200px
+    height $items-date-height    
     line-height $items-date-height
     background #fff
     border-bottom 0.5px solid $color
