@@ -12,7 +12,6 @@
 			class="tab-slider-wrap"
 			v-if="itemsData.length>0"
 			ref="tabslider"
-			:data="itemsData"
 		>
 			
 			<scroll
@@ -221,7 +220,7 @@ export default {
 		.load
 			position: absolute
 			right 30px
-			top 30px
+			top 20px
 	.tab-slider-wrap
 		position: fixed
 		top $channel-hd-height

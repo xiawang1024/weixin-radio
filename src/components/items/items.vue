@@ -448,7 +448,7 @@ export default {
 			font-size 44px
 		.load
 			position: absolute
-			top 30px
+			top 20px
 			right 30px
 	.audio-wrap
 		width 100%
