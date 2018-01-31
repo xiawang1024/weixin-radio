@@ -18,14 +18,14 @@
 			<scroll
 				v-for="(group,index) in itemsData"
 				:data = "group"
-				:scrollbar="true"
+				:scrollbar="false"
 				
 				@pullingDown="onPullingDown"
 				:key="index"
 			>
 				
 			<div class="scroll">
-				<div v-for="item in group" class="items" @click="goToItems(item.cid,item.streams[0])" :class="item.cid == isPlayIndex ? 'isLivePlay' : ''">
+				<div v-for="item in group" :key="item.image" class="items" @click="goToItems(item.cid,item.streams[0])" :class="item.cid == isPlayIndex ? 'isLivePlay' : ''">
 					<div class="icon item">
 						<img :src="'http://program.hndt.com' + item.image" class="img">
 					</div>
@@ -120,7 +120,7 @@ export default {
 			// 更新数据
 			setTimeout(() => {
 				this.loading = false
-				// this.items.unshift('我是新数据: ' + +new Date())
+				
 			}, 1000)
 		},
 		_getClassItem() {

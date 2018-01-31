@@ -16,37 +16,27 @@
           </div>
       </div>
       <div class="tab">
-          <span class="tab-item" :class="tabBtn ? 'z-crt' : ''" @click="tabSwitch">推荐</span>
-          <span class="tab-item" :class="!tabBtn ? 'z-crt' : ''" @click="tabSwitch">评论</span>
+          <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
+          <span class="tab-item" :class="tabIndex == 1 ? 'z-crt' : ''" @click="tabSwitch(1)">评论</span>
       </div>
-      <div class="tab-wrap">
-          <div class="tab-item recommend-tab" v-show="tabBtn">
-            <div class="item" v-for="n of 10">
-                <div class="img-wrap">
-                    <img src="http://www.hndt.com/wap/978/1891990/res/8VCcCFWS.jpg?1498869074099" alt="" class="img">
-                </div>
-                <div class="text-wrap">
-                    <h2 class="title">王者局排位韩信王者局排位韩信王者局排位韩信</h2>
-                    <p class="desc">河南广电全媒体贯彻落实习近平河南广电全媒体贯彻落实习近平</p>
-                </div>
+    <!-- <div class="tab-item recommend-tab" v-show="tabBtn">
+        <div class="item" v-for="n of 10">
+            <div class="img-wrap">
+                <img src="http://www.hndt.com/wap/978/1891990/res/8VCcCFWS.jpg?1498869074099" alt="" class="img">
             </div>
-          </div>
-          <div class="tab-item msg-tab" v-show="!tabBtn">
-              <div class="item" v-for="n of 10">
-                  <div class="avatar-wrap">
-                      <img src="http://wx.qlogo.cn/mmopen/Q3auHgzwzM4jkjibDBUMBHHqcqjSUkRK9bCEZicLdTaJdwJ7pJjkLlfMxTicfxgkVJavVibOOZ5cxYbT0jA4ibH4AtA/0" alt="" class="avatar">
-                  </div>
-                  <div class="msg-wrap">
-                      <h2 class="name">石头</h2>
-                      <p class="msg">哈喽，主持人。说的真好哈喽，主持人。说的真好哈喽，主持人。说的真好哈喽，主持人。说的真好哈喽，主持人。说的真好</p>
-                  </div>
-              </div>
-              <div class="msg-send">
-                  <input type="text" class="send-ipt">
-                  <button class="send-btn">发送</button>
-              </div>
-          </div>
-      </div>
+            <div class="text-wrap">
+                <h2 class="title">王者局排位韩信王者局排位韩信王者局排位韩信</h2>
+                <p class="desc">河南广电全媒体贯彻落实习近平河南广电全媒体贯彻落实习近平</p>
+            </div>
+        </div>
+    </div>           -->
+    <comment-list 
+        class="comment-list"
+        ref="child"
+        :cid="cid"
+        v-show="tabIndex == 1" 			
+    ></comment-list>
+    <toast :isShowToast="isShowToast" :msg="msg"></toast>
   </div>
 </template>
 
@@ -54,17 +44,25 @@
 import Scroll from '@/base/scroll'
 import { getChannelItem } from 'api/index'
 
+import CommentList from '@/base/comment-list'
+import Toast from '@/base/toast.vue'
+
 export default {
   name:'live',
   components:{
-      Scroll
+      Scroll,
+      CommentList,
+      Toast
   },
   data() {
       return {
+          cid:'',
           channelLogo:'',
           liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
-          playBtn:true,
-          tabBtn:true
+          playBtn:true,          
+          tabIndex:1,
+          msg:'暂未开通功能！',
+          isShowToast:false
       }
   },
   created() {
@@ -101,8 +99,17 @@ export default {
               this.playBtn = false
           }
       },
-      tabSwitch() {          
-          this.tabBtn = !this.tabBtn
+      tabSwitch(index) {          
+          this.tabIndex = index
+          if(index == 0) {
+                this.isShowToast = true
+                setTimeout(() => {
+                    this.isShowToast = false
+                }, 3000);
+          } 
+          this.$nextTick(() => {
+            this.$refs.child.refresh()
+          })	
       }
   }
 }
@@ -173,111 +180,99 @@ export default {
             &.z-crt
                 color #0081dc
                 border-bottom 4px solid #0081dc
-    .tab-wrap
-        position fixed
-        top 640px
-        bottom 0
-        left 0
-        right 0
-        width 100%        
-        padding 10px 30px
-        box-sizing border-box
-        overflow auto
-        -webkit-overflow-scrolling: touch
-        .recommend-tab
-            .item
-                display flex
-                align-items center
-                width 100%
-                padding 30px 0
-                box-sizing border-box
-                border-1px($color)
-                .img-wrap
-                    flex 0 0 3.06rem
-                    width 230px
-                    height 134px
-                    .img
-                        display block
-                        width 100%
-                        height 100% 
-                .text-wrap
-                    flex 0 0 6.13rem
-                    width 460px
-                    padding-left 20px
-                    box-sizing border-box                
-                    .title
-                        font-size 36px
-                        font-weight 500
-                        no-wrap()
-                        margin-bottom 14px
-                        color #333333
-                    .desc
-                        font-size 24px
-                        line-height 1.3
-                        color #999999
-        .msg-tab
-            position relative
-            padding-bottom $items-hd-height
-            .item
-                display flex
-                align-items center
-                width 100%
-                padding 30px 0 
-                box-sizing border-box
-                .avatar-wrap
-                    flex 0 0 80px
-                    align-self flex-start
-                    margin-top 10px
+    .recommend-tab
+        .item
+            display flex
+            align-items center
+            width 100%
+            padding 30px 0
+            box-sizing border-box
+            border-1px($color)
+            .img-wrap
+                flex 0 0 3.06rem
+                width 230px
+                height 134px
+                .img
+                    display block
+                    width 100%
+                    height 100% 
+            .text-wrap
+                flex 0 0 6.13rem
+                width 460px
+                padding-left 20px
+                box-sizing border-box                
+                .title
+                    font-size 36px
+                    font-weight 500
+                    no-wrap()
+                    margin-bottom 14px
+                    color #333333
+                .desc
+                    font-size 24px
+                    line-height 1.3
+                    color #999999
+    .comment-list
+        top 644px        
+        .item
+            display flex
+            align-items center
+            width 100%
+            padding 30px 0 
+            box-sizing border-box
+            .avatar-wrap
+                flex 0 0 80px
+                align-self flex-start
+                margin-top 10px
+                width 90px
+                .avatar
+                    display block
                     width 90px
-                    .avatar
-                        display block
-                        width 90px
-                        height 90px
-                        border-radius 50%
-                .msg-wrap                    
-                    flex 0 0 8rem
-                    width 600px
-                    padding-left 30px
-                    box-sizing border-box
-                    .name
-                        margin-bottom 20px
-                        font-size 30px
-                        color #666666
-                    .msg
-                        padding 20px
-                        border-radius 8px
-                        font-size 24px
-                        line-height 1.6
-                        background #eeeeee
-                        color #333333
-            .msg-send
-                position fixed
-                bottom 0
-                left 0
-                width 100%
-                display flex
-                justify-content space-around
-                align-items center
-                height $items-hd-height
-                border-top 1px solid #bebebe
-                background #ffffff
-                .send-ipt
-                    width 570px
-                    height 64px
-                    border 1px solid #0081dc
-                    border-radius 32px
-                    padding-left 30px
-                    box-sizing border-box
-                    font-size 28px
-                .send-btn
-                    width 96px
-                    height 64px
-                    border none 
-                    outline none 
-                    border-radius 6px
-                    background #0081dc
-                    color #ffffff
+                    height 90px
+                    border-radius 50%
+            .msg-wrap                    
+                flex 0 0 8rem
+                width 600px
+                padding-left 30px
+                box-sizing border-box
+                .name
+                    margin-bottom 20px
                     font-size 30px
-                    &:active
-                        background #0868ad
+                    color #666666
+                .msg
+                    padding 20px
+                    border-radius 8px
+                    font-size 24px
+                    line-height 1.6
+                    background #eeeeee
+                    color #333333
+        .msg-send
+            position fixed
+            bottom 0
+            left 0
+            width 100%
+            display flex
+            justify-content space-around
+            align-items center
+            height $items-hd-height
+            border-top 1px solid #bebebe
+            background #ffffff
+            .send-ipt
+                width 570px
+                height 64px
+                border 1px solid #0081dc
+                border-radius 32px
+                padding-left 30px
+                box-sizing border-box
+                font-size 28px
+            .send-btn
+                width 96px
+                height 64px
+                border none 
+                outline none 
+                border-radius 6px
+                background #0081dc
+                color #ffffff
+                font-size 30px
+                &:active
+                    background #0868ad
 </style>

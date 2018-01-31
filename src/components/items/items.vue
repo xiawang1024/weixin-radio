@@ -393,9 +393,9 @@ export default {
 			}	
 		},		
 		goToLive() {						
-			this._toast('视频功能暂未开放！')
+			// this._toast('视频功能暂未开放！')
 			//暂不开放视频直播页面
-			// this.$router.push({path:'/live',query:{cid:this.cid}})
+			this.$router.push({path:'/live',query:{cid:this.cid}})
 		},
 		_toast (msg) {
 			this.msg = msg
