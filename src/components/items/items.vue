@@ -8,11 +8,14 @@
 		</div>
 		<div class="audio-wrap" >
 			<div class="item-logo" v-if="itemsInfo">
-				<img
-					:src="'http://program.hndt.com' + itemsInfo.image"
-					class="img"
-					:class="playOrPause ? '' : 'isPause' "
-				>
+				<div class="img-wrap" ref="imgOuter">
+					<img
+						ref="imgInner"
+						:src="'http://program.hndt.com' + itemsInfo.image"
+						class="img"
+						:class="playOrPause ? 'isPlay' : '' "
+					>
+				</div>
 				<span
 					:class=" playOrPause ? 'icon-pause' : 'icon-play'"
 					@click="playSwitch"
@@ -101,9 +104,8 @@ import { getChannelItem, clickItem, getCommentList } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 
-const IMGURL = 'http://hndt.com/res/logo_300.png'
-const DESC = '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源。“听河南，览天下”'
-const PREFIX = 'http://program.hndt.com'
+import { _pad } from 'common/js/util'
+
 export default {
 	name:'items',
 	components:{
@@ -145,46 +147,8 @@ export default {
 			}
 		}
 		this.watchPlayPercent()
-	},
-	beforeRouteEnter(to,from,next) {
-		
-		
-		next( vm => {
-			vm.href = window.location.href.split('#')[0] + '#' + to.fullPath
-			console.log(vm.href)
-		})
-		
-	},
+	},	
 	methods:{
-		_share() { //频率页面分享
-			wx.ready(() => {
-				wx.onMenuShareTimeline({
-					title: this.itemsInfo.name, // 分享标题
-					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: PREFIX + this.itemsInfo.image, // 分享图标
-					success: function() {
-						// 用户确认分享后执行的回调函数
-					},
-					cancel: function() {
-						// 用户取消分享后执行的回调函数
-					}
-				});
-				wx.onMenuShareAppMessage({
-					title: this.itemsInfo.name, // 分享标题
-					desc: this.itemsInfo.description, // 分享描述
-					link: this.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-					imgUrl: PREFIX + this.itemsInfo.image, // 分享图标
-					type: '', // 分享类型,music、video或link，不填默认为link
-					dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-					success: function() {
-						// 用户确认分享后执行的回调函数
-					},
-					cancel: function() {
-						// 用户取消分享后执行的回调函数
-					}
-				});
-			})
-		},
 		_getChannelItem(cid) {
 			let todayStamp = this._timeToStamp(this._getToDay());
 			clickItem(cid, todayStamp).then((res) => {
@@ -202,8 +166,7 @@ export default {
 					this._playSrc(this.liveStream)										
 				}
 				setTimeout(() => {
-					this._isPlay(data.programs)
-					// this._share()
+					this._isPlay(data.programs)					
 				},20)
 			})
 		},
@@ -237,6 +200,14 @@ export default {
 		playSwitch() {
 			if(this.playOrPause){
 				this.playOrPause = false
+				// 微信animation-play-state兼容strat
+				let [image,container] = [ this.$refs.imgInner, this.$refs.imgOuter]
+				let iTransform = getComputedStyle(image).transform;				
+				let cTransform = getComputedStyle(container).transform;
+				container.style.transform = cTransform === 'none'
+					? iTransform
+					: iTransform.concat(' ', cTransform);
+				// 微信animation-play-state兼容end	
 				this.audio.pause()
 			}else{
 				this.playOrPause = true
@@ -257,30 +228,22 @@ export default {
 		format(interval){
 			let val = parseInt(interval) * 1000;
 			let time = new Date(val);
-			const hour = this._pad(time.getHours());
-			const min = this._pad(time.getMinutes());
+			const hour = _pad(time.getHours());
+			const min = _pad(time.getMinutes());
 			return `${hour}:${min}`
 		},
 		formatPlayTime(interval) {
 			interval = interval | 0
-			const minute = this._pad(interval / 60 | 0)
-			const second = this._pad(interval % 60)
+			const minute = _pad(interval / 60 | 0)
+			const second = _pad(interval % 60)
 			return `${minute}:${second}`
-		},
-		_pad(num, n = 2) {
-			let len = num.toString().length
-			while (len < n) {
-				num = '0' + num
-				len++
-			}
-			return num
-		},
+		},		
 		//点播列表
 		getDatePrograms(date){
 			let cid = this.cid;
 			let year = (new Date()).getFullYear();
-			let month = this._pad(new Date().getMonth() + 1);
-		let day = this._pad(new Date().getDate())
+			let month = _pad(new Date().getMonth() + 1);
+			let day = _pad(new Date().getDate())
 			let time = year + '-' + date.date + ' 00:00:00.0';
 			let stamp = this._timeToStamp(time)
 			let nowDate = month +'-'+ day;
@@ -313,18 +276,18 @@ export default {
 		},
 		_getToDay() {
 			let year = (new Date()).getFullYear();
-			let month = this._pad(new Date().getMonth() + 1);
-			let day = this._pad(new Date().getDate())
+			let month = _pad(new Date().getMonth() + 1);
+			let day = _pad(new Date().getDate())
 			let today =`${year}-${month}-${day} 00:00:00.0`
 			return today
 		},
 		//时间转时间戳
 		_timeToStamp(date){
-		// var date = '2015-03-05 00:00:00.0';
-		date = date.substring(0,19);
-		date = date.replace(/-/g,'/');
-		var timestamp = new Date(date).getTime();
-		return timestamp/1000;
+			// var date = '2015-03-05 00:00:00.0';
+			date = date.substring(0,19);
+			date = date.replace(/-/g,'/');
+			var timestamp = new Date(date).getTime();
+			return timestamp/1000;
 		},
 		_getItems(cid,time,isScrollTop){
 			clickItem(cid, time).then((res) => {
@@ -348,8 +311,8 @@ export default {
 			})
 		},
 		onProgressBarChange(percent) {
-		const currentTime = this.audio.duration * percent
-		this.audio.currentTime = currentTime
+			const currentTime = this.audio.duration * percent
+			this.audio.currentTime = currentTime
 		},
 		//判断是否是pc设备
 		_isPc(){
@@ -416,8 +379,6 @@ export default {
 @import '~common/stylus/mixin.styl'
 
 @keyframes rotate
-    0%
-        transform rotate(0deg)
     100%
         transform rotate(360deg)
 .toast
@@ -466,10 +427,9 @@ export default {
 				width 240px
 				height 240px
 				border-radius 50%
-				border 2px solid $color
-				animation rotate 6s linear infinite
-				&.isPause
-					animation-play-state:paused					
+				border 2px solid $color				
+				&.isPlay
+					animation rotate 10s linear infinite					
 			.icon-play,.icon-pause
 				position: absolute
 				left 50%
