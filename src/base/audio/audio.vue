@@ -5,8 +5,11 @@
 </template>
 
 <script>
+import audioAutoPlay from 'common/js/audioAutoPlay'
 export default {
-  
+  mounted () {
+    audioAutoPlay('audio')
+  }
 }
 </script>
 
