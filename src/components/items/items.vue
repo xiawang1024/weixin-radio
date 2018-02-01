@@ -99,16 +99,14 @@ import Scroll from '@/base/scroll/scroll'
 import DatePick from '@/base/datePick/datePick'
 import ProgressBar from '@/base/progressBar/progressBar'
 import DownLoad from '@/base/downLoad/downLoad'
-// import Toast from '@/base/toast/toast'
 import CommentList from '@/base/commentList/commentList'
 
 import { getChannelItem, clickItem, getCommentList } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
-
 import dialogConf from 'common/js/dialog.js'
-
 import { _pad } from 'common/js/util'
+
 
 export default {
 	name:'items',
@@ -380,7 +378,7 @@ export default {
 			}	
 		},		
 		goToLive() {						
-			this._toast('视频功能暂未开放！')
+			this._toast('视频功能暂未开放！')			
 			//暂不开放视频直播页面
 			// this.$router.push({path:'/live',query:{cid:this.cid}})
 		},
