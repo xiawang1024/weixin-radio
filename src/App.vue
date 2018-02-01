@@ -28,7 +28,6 @@ export default {
 	  		me.canPlay = false
 	  	}
   	})
-
   }
 }
 </script>
