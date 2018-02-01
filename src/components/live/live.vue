@@ -37,28 +37,34 @@
             :cid="cid"
             v-show="tabIndex == 1" 			
         ></comment-list>
-        <toast :isShowToast="isShowToast" :msg="msg"></toast>
+        <!-- <toast :isShowToast="isShowToast" :msg="msg"></toast> -->
+        <vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
+			{{msg}}			
+		</vodal>
     </div>
 </template>
 
 <script>
 import Scroll from '@/base/scroll/scroll'
 import CommentList from '@/base/commentList/commentList'
-import Toast from '@/base/toast/toast.vue'
+
 import DownLoad from '@/base/downLoad/downLoad'
 
 import { getChannelItem } from 'api/index'
+
+import dialogConf from 'common/js/dialog.js'
 
 export default {
   name:'live',
   components:{
       Scroll,
       CommentList,
-      Toast,
+    //   Toast,
       DownLoad
   },
   data() {
       return {
+          customStyles:dialogConf,//模态框css配置
           cid:'',
           channelLogo:'',
           liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
@@ -82,6 +88,7 @@ export default {
             if(cid){
                 this._getChannelItem(cid).then((res) => {
                     let data = res.data
+                    this.$store.dispatch('setShareConf',data)
                     this.channelLogo  = `http://program.hndt.com${data.image}`;
                     this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'
                 })
@@ -134,7 +141,7 @@ export default {
         font-size 0
         .img
             vertical-align middle
-            height 100px
+            height 80px
         .back
             display inline-block
             position: absolute

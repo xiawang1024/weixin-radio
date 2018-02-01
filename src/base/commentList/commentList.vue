@@ -1,33 +1,35 @@
 <template>
-    <div class="comment-list">
-        <scroll
-            class="list-wrap"
-            ref="scroll"
-            :data="commentList"
-            :pullDownRefresh = "pullDownRefresh"
-            :pullUpLoad="pullUpLoad"
-            @pullingDown = "onPullingDown"
-            @pullingUp="onPullingUp"
-        >            
-            <div class="list" v-for="item of commentList" :key="item.id">
-                <img :src="item.icon || defaultAvatar" alt="" class="avatar">
-                <div class="text-wrap">
-                    <span class="time">{{item.create_time | timeStamp2LocalTime}}</span>
-                    <h5 class="name">{{item.creater}}</h5>
-                    <p class="content">
-                        {{item.content}}
-                    </p>
-                </div>
-            </div>            
-        </scroll>
-        <div class="send-wrap" @click="tips">
-            <input type="text" class="ipt" placeholder="我想说..." disabled>
-            <button class="btn">发送</button>
+    <keep-alive>
+        <div class="comment-list">
+            <scroll
+                class="list-wrap"
+                ref="scroll"
+                :data="commentList"
+                :pullDownRefresh = "pullDownRefresh"
+                :pullUpLoad="pullUpLoad"
+                @pullingDown = "onPullingDown"
+                @pullingUp="onPullingUp"
+            >            
+                <div class="list" v-for="item of commentList" :key="item.id">
+                    <img :src="item.icon || defaultAvatar" alt="" class="avatar">
+                    <div class="text-wrap">
+                        <span class="time">{{item.create_time | timeStamp2LocalTime}}</span>
+                        <h5 class="name">{{item.creater}}</h5>
+                        <p class="content">
+                            {{item.content}}
+                        </p>
+                    </div>
+                </div>            
+            </scroll>
+            <div class="send-wrap" @click="tips">
+                <input type="text" class="ipt" placeholder="我想说..." disabled>
+                <button class="btn">发送</button>
+            </div>
+            <vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="slideDown" @hide="isShowToast = false" :customStyles="customStyles">			
+                {{msg}}	
+            </vodal>
         </div>
-        <vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
-			{{msg}}	
-		</vodal>
-    </div>
+    </keep-alive>
 </template>
 
 
@@ -36,6 +38,8 @@ import Scroll from '@/base/scroll/scroll'
 
 import dialogConf from 'common/js/dialog.js'
 import { getCommentList } from 'api/index'
+
+import { mapState } from 'vuex'
 
 export default {
     name:'comment-list',
@@ -48,8 +52,7 @@ export default {
             customStyles:dialogConf,//模态框css配置
             defaultAvatar:require('./default-avatar.png'),
             commentList:[],
-            pageIndex:1,
-            listLen:0,
+            pageIndex:1,        
 			pullDownRefresh:{
 				txt:'更新成功',
                 stop:60,
@@ -72,8 +75,15 @@ export default {
             default:''
         }
     },
-   
+    computed: {
+        ...mapState(['commentListInfo'])
+    },
     created () {
+        if(this.cid) {
+            this._getCommentList(this.cid)
+        }
+    },
+    activated () {
         if(this.cid) {
             this._getCommentList(this.cid)
         }
@@ -91,8 +101,7 @@ export default {
 		_getCommentList(id) {
 			return getCommentList(id).then((res) => {
 				let data = res.data
-				if(data.success) {
-                    this.listLen = data.result.pages-1
+				if(data.success) {                
 					this.commentList = data.result.list
 				}
 			})
@@ -107,6 +116,7 @@ export default {
                 
                 if(data.result) {
                     this.commentList = this.commentList.concat(data.result.list)
+                    // this.$store.dispatch('setCommentListInfo',newCommentListInfo)                   
                 }else{
                     this.$refs.scroll.forceUpdate()
                 }
@@ -128,6 +138,7 @@ export default {
 @import '~common/stylus/mixin.styl'
 .comment-list
     position fixed
+    z-index 100
     top $items-list-date-top
     bottom 0
     left 0

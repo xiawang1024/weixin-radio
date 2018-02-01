@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
         storeShareConf = store.state.shareConf   
         shareConf = initShareConf(isChannel, storeShareConf,to)  
         wxReady(shareConf)   
-        console.log(shareConf)
+        
     },600)
     
     

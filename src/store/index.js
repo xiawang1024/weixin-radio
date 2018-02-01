@@ -7,7 +7,8 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-	shareConf:null
+    shareConf:null,
+    commentListInfo:[]
 }
 
 export default new Vuex.Store({

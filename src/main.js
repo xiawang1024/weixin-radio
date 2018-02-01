@@ -17,7 +17,8 @@ import '@/wechat/index'
 import "@/common/js/flexible.js"
 import '@/common/stylus/index.styl'
 import 'vodal/common.css'
-import 'vodal/zoom.css'
+import 'vodal/door.css'
+import 'vodal/slide-down.css'
 
 fastclick.attach(document.body)
 

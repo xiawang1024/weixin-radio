@@ -86,7 +86,7 @@
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
 		</div>
-		<vodal className="my-dialog" :width="4" :height='2' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
+		<vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="door" @hide="isShowToast = false" :customStyles="customStyles">			
 			{{msg}}			
 		</vodal>
 	</div>
@@ -154,6 +154,17 @@ export default {
 		this.watchPlayPercent()
 	},	
 	methods:{
+		_getCommentList(cid) {
+			getCommentList(cid).then((res) => {
+				let data = res.data
+				if(data.success) {                    
+					this.$store.dispatch('setCommentListInfo',data.result.list)
+				}else{
+					//暂未开通
+					this.$store.dispatch('setCommentListInfo','')
+				}
+			})
+		},
 		_getChannelItem(cid) {
 			let todayStamp = this._timeToStamp(this._getToDay());
 			clickItem(cid, todayStamp).then((res) => {
@@ -225,6 +236,10 @@ export default {
 			this.cid = cid;
 			if(cid){
 				this._getChannelItem(cid)
+				// this._getCommentList(cid)
+			}else{
+				this._getChannelItem(1)
+				// this._getCommentList(1)
 			}
 		},
 		goToChannel() {
@@ -365,9 +380,9 @@ export default {
 			}	
 		},		
 		goToLive() {						
-			// this._toast('视频功能暂未开放！')
+			this._toast('视频功能暂未开放！')
 			//暂不开放视频直播页面
-			this.$router.push({path:'/live',query:{cid:this.cid}})
+			// this.$router.push({path:'/live',query:{cid:this.cid}})
 		},
 		_toast (msg) {
 			this.msg = msg

@@ -1,1 +1,3 @@
 export const SET_SHARE_CONF = 'SET_SHARE_CONF'
+
+export const SET_COMMENT_LIST_INFO = 'SET_COMMENT_LIST_INFO'
