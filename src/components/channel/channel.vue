@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+
 import Loading from '@/base/gLoading/gLoading'
 import TabSlider from '@/base/tabSlider/tabSlider'
 import Scroll from '@/base/scroll/scroll'
