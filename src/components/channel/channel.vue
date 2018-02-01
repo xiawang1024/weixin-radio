@@ -5,7 +5,7 @@
 				<wave></wave>
 			</div>
 			<img src="./logo.png" alt="" class="img">
-			<load class="load"></load>
+			<down-load class="load"></down-load>
 		</div>
 		<loading title="努力加载中..." v-if="isLoading"></loading>
 		<tab-slider
@@ -57,7 +57,7 @@ import Loading from '@/base/gLoading/gLoading'
 import TabSlider from '@/base/tabSlider/tabSlider'
 import Scroll from '@/base/scroll/scroll'
 import Wave from '@/base/wave/wave'
-import Load from '@/components/load/load'
+import DownLoad from '@/base/downLoad/downLoad'
 
 import {getClassItem} from "api/index"
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
@@ -69,7 +69,7 @@ export default {
 		TabSlider,
 		Scroll,
 		Wave,
-		Load,
+		DownLoad,
 		Loading
 	},
 	data() {

@@ -11,12 +11,17 @@ import axios from 'axios'
 
 import filter from './filter'
 
-import '@/wechat/index'
+import Vodal from 'vodal'
 
+import '@/wechat/index'
 import "@/common/js/flexible.js"
 import '@/common/stylus/index.styl'
+import 'vodal/common.css'
+import 'vodal/zoom.css'
 
 fastclick.attach(document.body)
+
+Vue.component(Vodal.name,Vodal)
 
 /* eslint-disable no-new */
 new Vue({

@@ -4,7 +4,7 @@
 			<!-- <router-link to="/channel" tag='span' class="icon-back back"></router-link> -->
 			<span class="icon-back back" @click="goToChannel"></span>
 			<img src="./logo.png" alt="" class="img">
-			<load class="load"></load>
+			<down-load class="load"></down-load>
 		</div>
 		<div class="audio-wrap" >
 			<div class="item-logo" v-if="itemsInfo">
@@ -86,7 +86,9 @@
 		<div class="netRadioDesc" v-show="itemsList.length==0">
 			<div class="desc-wrap" v-if="itemsInfo">{{itemsInfo.description}}</div>
 		</div>
-		<toast :msg="msg" :isShowToast="isShowToast"></toast>
+		<vodal className="my-dialog" :width="4" :height='2' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
+			{{msg}}			
+		</vodal>
 	</div>
 </template>
 
@@ -96,13 +98,15 @@
 import Scroll from '@/base/scroll/scroll'
 import DatePick from '@/base/datePick/datePick'
 import ProgressBar from '@/base/progressBar/progressBar'
-import Load from '@/components/load/load'
-import Toast from '@/base/toast/toast'
+import DownLoad from '@/base/downLoad/downLoad'
+// import Toast from '@/base/toast/toast'
 import CommentList from '@/base/commentList/commentList'
 
 import { getChannelItem, clickItem, getCommentList } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
+
+import dialogConf from 'common/js/dialog.js'
 
 import { _pad } from 'common/js/util'
 
@@ -110,14 +114,15 @@ export default {
 	name:'items',
 	components:{
 		Scroll,
-		Load,
+		DownLoad,
 		DatePick,
 		ProgressBar,
-		Toast,
+		// Toast,
 		CommentList
 	},
 	data() {
 		return {
+			customStyles:dialogConf,//模态框css配置
 			itemsInfo:null,//频率信息
 			itemsList:[], //频率programs
 			isPlayIndex:null, //直播index
@@ -353,7 +358,7 @@ export default {
 						this.$refs.child.refresh()
 					})	
 				}else{
-					this._toast('评论未开通！')
+					this._toast('互动暂未开通！')
 				}		
 			}else {
 				this.tabIndex = index
@@ -369,7 +374,7 @@ export default {
 			this.isShowToast = true
 			setTimeout(() => {
 				this.isShowToast = false
-			}, 3000);
+			}, 2000);
 		}
 	}
 }

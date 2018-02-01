@@ -1,4 +1,3 @@
-
 export default function audioAutoPlay(id){  
     let audio = document.getElementById(id),  
         play = function(){  

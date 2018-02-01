@@ -7,8 +7,6 @@ const Channel = r => require.ensure([], () => r(require('@/components/channel/ch
 const Items = r => require.ensure([], () => r(require('@/components/items/items')), 'items')
 const Live = r => require.ensure([], () => r(require('@/components/live/live')), 'live')
 
-const DatePick = r => require.ensure([], () => r(require('@/base/datePick/datePick')), 'datePick')
-
 Vue.use(Router)
 
 export default new Router({
@@ -31,11 +29,6 @@ export default new Router({
       path: '/live',
       name: 'live',
       component: Live
-    },
-    {
-      path: '/datePick',
-      name: 'DatePick',
-      component: DatePick
     }
   ]
 })

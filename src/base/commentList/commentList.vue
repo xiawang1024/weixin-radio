@@ -24,25 +24,28 @@
             <input type="text" class="ipt" placeholder="我想说..." disabled>
             <button class="btn">发送</button>
         </div>
-        <toast :isShowToast="isShowToast" :msg="msg"></toast>
+        <vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
+			{{msg}}	
+		</vodal>
     </div>
 </template>
 
 
 <script>
 import Scroll from '@/base/scroll/scroll'
-import Toast from '@/base/toast/toast.vue'
 
+import dialogConf from 'common/js/dialog.js'
 import { getCommentList } from 'api/index'
 
 export default {
     name:'comment-list',
     components:{
        Scroll,
-       Toast
+    //    Toast
     },
     data () {
         return {
+            customStyles:dialogConf,//模态框css配置
             defaultAvatar:require('./default-avatar.png'),
             commentList:[],
             pageIndex:1,
@@ -110,11 +113,11 @@ export default {
             })        
         },
         tips() {
-            this.msg = '请下载河南广播APP体验更多功能！'
+            this.msg = '请打开河南广播APP体验更多功能！'
             this.isShowToast = true
             setTimeout(() => {
                 this.isShowToast = false
-            }, 3000);
+            }, 2000);
         }
     }
 }

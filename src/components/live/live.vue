@@ -1,24 +1,25 @@
 <template>
-  <div class="live">
-      <div class="hd">
-          <span class="icon-back back" @click="goToItem"></span>
-          <img :src="channelLogo" alt="" class="img">
-      </div>
-      <div class="video-wrap">
-          <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:cover" autoplay></video>
-          <div class="controls">
-              <div class="playOrPause">
-                  <span
-					:class="playBtn ? 'icon-pause' : 'icon-play'"
-                    @click="playSwitch"
-				  ></span>
-              </div>
-          </div>
-      </div>
-      <div class="tab">
-          <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
-          <span class="tab-item" :class="tabIndex == 1 ? 'z-crt' : ''" @click="tabSwitch(1)">评论</span>
-      </div>
+    <div class="live">
+        <div class="hd">
+            <span class="icon-back back" @click="goToItem"></span>
+            <img :src="channelLogo" alt="" class="img">
+            <down-load class="load"></down-load>
+        </div>
+        <div class="video-wrap">
+            <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:cover" autoplay></video>
+            <div class="controls">
+                <div class="playOrPause">
+                    <span
+                        :class="playBtn ? 'icon-pause' : 'icon-play'"
+                        @click="playSwitch"
+                    ></span>
+                </div>
+            </div>
+        </div>
+        <div class="tab">
+            <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
+            <span class="tab-item" :class="tabIndex == 1 ? 'z-crt' : ''" @click="tabSwitch(1)">评论</span>
+        </div>
     <!-- <div class="tab-item recommend-tab" v-show="tabBtn">
         <div class="item" v-for="n of 10">
             <div class="img-wrap">
@@ -30,29 +31,31 @@
             </div>
         </div>
     </div>           -->
-    <comment-list 
-        class="comment-list"
-        ref="child"
-        :cid="cid"
-        v-show="tabIndex == 1" 			
-    ></comment-list>
-    <toast :isShowToast="isShowToast" :msg="msg"></toast>
-  </div>
+        <comment-list 
+            class="comment-list"
+            ref="child"
+            :cid="cid"
+            v-show="tabIndex == 1" 			
+        ></comment-list>
+        <toast :isShowToast="isShowToast" :msg="msg"></toast>
+    </div>
 </template>
 
 <script>
 import Scroll from '@/base/scroll/scroll'
-import { getChannelItem } from 'api/index'
-
 import CommentList from '@/base/commentList/commentList'
 import Toast from '@/base/toast/toast.vue'
+import DownLoad from '@/base/downLoad/downLoad'
+
+import { getChannelItem } from 'api/index'
 
 export default {
   name:'live',
   components:{
       Scroll,
       CommentList,
-      Toast
+      Toast,
+      DownLoad
   },
   data() {
       return {
@@ -143,7 +146,7 @@ export default {
             font-size 44px
         .load
             position: absolute
-            top 30px
+            top 20px
             right 30px
     .video-wrap
         position relative
