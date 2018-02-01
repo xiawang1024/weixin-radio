@@ -7,7 +7,7 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-	id:''
+	shareConf:null
 }
 
 export default new Vuex.Store({

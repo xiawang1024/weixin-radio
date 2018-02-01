@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
 
-export const addId = ({ commit }, id) => {  
-  commit(types.ADD_TO_CART,payload) 
+export const setShareConf = ({ commit }, payload) => {  
+  commit(types.SET_SHARE_CONF,payload) 
 }

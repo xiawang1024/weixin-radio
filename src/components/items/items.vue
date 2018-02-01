@@ -189,6 +189,7 @@ export default {
 			let todayStamp = this._timeToStamp(this._getToDay());
 			clickItem(cid, todayStamp).then((res) => {
 				let data = res.data;
+				this.$store.dispatch('setShareConf',data)
 				this.itemsInfo = data;
 				this.itemsList = data.programs;			
 				if(data.cid == 120) {					
