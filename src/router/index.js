@@ -21,12 +21,12 @@ export default new Router({
       component: Channel
     },
     {
-      path: '/items',
+      path: '/channel/items',
       name: 'items',
       component: Items
     },
     {
-      path: '/live',
+      path: '/channel/items/live',
       name: 'live',
       component: Live
     }

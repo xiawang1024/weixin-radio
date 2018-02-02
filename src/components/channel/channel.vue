@@ -139,7 +139,7 @@ export default {
 				this.playSrc(cid,stream);
 			}
 			this.setPlayIndex(cid);
-			this.$router.push({ path: '/items', query: { cid: cid }})
+			this.$router.push({ path: '/channel/items', query: { cid: cid }})
 		},
 		playSrc(cid,stream) {
 			if(cid != this.isPlayIndex){

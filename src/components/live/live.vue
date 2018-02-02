@@ -98,7 +98,7 @@ export default {
           return Promise.resolve(getChannelItem(cid))
       },
       goToItem() {
-          this.$router.push({path:'/items',query:{cid:this.cid}})
+          this.$router.push({path:'/channel/items',query:{cid:this.cid}})
       },
       playSwitch() {          
           if(this.video.paused) {
