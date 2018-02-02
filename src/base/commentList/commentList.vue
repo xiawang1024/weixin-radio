@@ -15,9 +15,10 @@
                     <div class="text-wrap">
                         <span class="time">{{item.create_time | timeStamp2LocalTime}}</span>
                         <h5 class="name">{{item.creater}}</h5>
-                        <p class="content">
-                            {{item.content}}
-                        </p>
+                        <div class="content">
+                            <p v-if="item.file_type == 'TEXT'" v-html="item.content"></p>                            
+                            <img class="img" v-if="item.file_type == 'PIC'" :src="item.content" />
+                        </div>
                     </div>
                 </div>            
             </scroll>
@@ -38,6 +39,7 @@ import Scroll from '@/base/scroll/scroll'
 
 import dialogConf from 'common/js/dialog.js'
 import { getCommentList } from 'api/index'
+const wx = require('weixin-js-sdk')
 
 import { mapState } from 'vuex'
 
@@ -128,7 +130,7 @@ export default {
             setTimeout(() => {
                 this.isShowToast = false
             }, 2000);
-        }
+        },        
     }
 }
 </script>
@@ -143,7 +145,7 @@ export default {
     bottom 0
     left 0
     right 0
-    overflow hidden
+    // overflow hidden
     .list-wrap
         position absolute
         top 0
@@ -162,6 +164,7 @@ export default {
                 display block
                 width 80px
                 height 80px
+                flex 0 0 1.067rem
                 border-radius 50%
             .text-wrap
                 position relative
@@ -184,6 +187,13 @@ export default {
                     line-height 1.6125
                     font-size 30px
                     color #000000
+                    word-wrap:break-word
+                    word-break:break-all
+                    .img
+                        display inline-block
+                        height 300px
+                        max-width 400px                        
+                        border-radius 20px
     .send-wrap
         display flex
         align-items center
