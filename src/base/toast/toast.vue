@@ -9,20 +9,20 @@
 
 <script>
 export default {
-  props:{
-      msg:{
-          type:String,
-          default:'toast'
-      },
-      isShowToast:{
-          type:Boolean,
-          default:false
-      },
-      interval:{
-          type:Number,
-          default:3000
-      }
-  }
+    props:{
+        msg:{
+            type:String,
+            default:'toast'
+        },
+        isShowToast:{
+            type:Boolean,
+            default:false
+        },
+        interval:{
+            type:Number,
+            default:3000
+        }
+    }
 }
 </script>
 
