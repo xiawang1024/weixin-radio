@@ -198,7 +198,7 @@ export default {
 		},
 		_scrollTo(index){
 			let listHeight = this.$refs.list[0].clientHeight;
-			let offsetY = parseInt(listHeight) * index
+			let offsetY = parseInt(listHeight) * index			
 			this.$refs.listview.scroll && this.$refs.listview.scroll.scrollTo(0,-offsetY,1000)
 		},
 		_scrollTop(){
