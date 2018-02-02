@@ -6,15 +6,15 @@
             <down-load class="load"></down-load>
         </div>
         <div class="video-wrap">
-            <video id="video" class="video-play" :src="liveStream" x5-playsinline="" playsinline="" webkit-playsinline="" style="object-fit:cover" autoplay></video>
-            <div class="controls">
+            <video id="video" class="video-play" :src="liveStream" x5-playsinline="" playsinline="" webkit-playsinline="" style="object-fit:cover" preload controls></video>
+            <!-- <div class="controls">
                 <div class="playOrPause">
                     <span
                         :class="playBtn ? 'icon-pause' : 'icon-play'"
                         @click="playSwitch"
                     ></span>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="tab">
             <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
@@ -56,73 +56,74 @@ import dialogConf from 'common/js/dialog.js'
 
 
 export default {
-  name:'live',
-  components:{
-      Scroll,
-      CommentList,
-    //   Toast,
-      DownLoad
-  },
-  data() {
-      return {
-          customStyles:dialogConf,//模态框css配置
-          cid:'',
-          channelLogo:'',
-          liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
-          playBtn:true,          
-          tabIndex:1,
-          msg:'暂未开通功能！',
-          isShowToast:false
-      }
-  },
-  created() {
-      this._parseQuery()
-  },
-  mounted() {
-      this.video = document.querySelector('#video')
-  },
-  methods:{
-      _parseQuery() {
-            let query = this.$route.query
-            let cid = query.cid;
-            this.cid = cid;
-            if(cid){
-                this._getChannelItem(cid).then((res) => {
-                    let data = res.data
-                    this.$store.dispatch('setShareConf',data)
-                    this.channelLogo  = `http://program.hndt.com${data.image}`;
-                    this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'
-                })
+    name:'live',
+    components:{
+        Scroll,
+        CommentList,
+        //   Toast,
+        DownLoad
+    },
+    data() {
+        return {
+            customStyles:dialogConf,//模态框css配置
+            cid:'',
+            channelLogo:'',
+            liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
+            playBtn:true,          
+            tabIndex:1,
+            msg:'暂未开通功能！',
+            isShowToast:false
+        }
+    },
+    created() {
+        this._parseQuery()
+    },
+    mounted() {
+        this.video = document.querySelector('#video')
+    },
+    methods:{
+        _parseQuery() {
+                let query = this.$route.query
+                let cid = query.cid;
+                this.cid = cid;
+                if(cid){
+                    this._getChannelItem(cid).then((res) => {
+                        let data = res.data
+                        this.$store.dispatch('setShareConf',data)
+                        this.channelLogo  = `http://program.hndt.com${data.image}`;
+                        this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'
+                        // this.video.setAttribute('src',this.liveStream)
+                    })
+                }
+        },
+        _getChannelItem(cid) {
+            return Promise.resolve(getChannelItem(cid))
+        },
+        goToItem() {
+            this.$router.push({path:'/channel/items',query:{cid:this.cid}})
+        },
+        playSwitch() {          
+            if(this.video.paused) {
+                this.video.play()
+                this.playBtn = true;
+            }else{
+                this.video.pause()
+                this.playBtn = false
             }
-      },
-      _getChannelItem(cid) {
-          return Promise.resolve(getChannelItem(cid))
-      },
-      goToItem() {
-          this.$router.push({path:'/channel/items',query:{cid:this.cid}})
-      },
-      playSwitch() {          
-          if(this.video.paused) {
-              this.video.play()
-              this.playBtn = true;
-          }else{
-              this.video.pause()
-              this.playBtn = false
-          }
-      },
-      tabSwitch(index) {      
-          this.tabIndex = index
-          if(index == 0) {
-                this.isShowToast = true
-                setTimeout(() => {
-                    this.isShowToast = false
-                }, 3000);
-          } 
-          this.$nextTick(() => {
-            this.$refs.child.refresh()
-          })	
-      }
-  }
+        },
+        tabSwitch(index) {      
+            this.tabIndex = index
+            if(index == 0) {
+                    this.isShowToast = true
+                    setTimeout(() => {
+                        this.isShowToast = false
+                    }, 3000);
+            } 
+            this.$nextTick(() => {
+                this.$refs.child.refresh()
+            })	
+        }
+    }
 }
 </script>
 

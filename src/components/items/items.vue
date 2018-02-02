@@ -107,6 +107,7 @@ import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import dialogConf from 'common/js/dialog.js'
 import { _pad } from 'common/js/util'
 
+import COMMENTLIST from './comment.js'
 
 export default {
 	name:'items',
@@ -363,7 +364,7 @@ export default {
 		},
 		//tab切换 回听/互动
 		tabSwitch (index) {
-			var arr = [119,117,120]			
+			var arr = COMMENTLIST			
 			if(index == 1) {
 				if(arr.indexOf(parseInt(this.itemsInfo.cid)) != -1){
 					this.tabIndex = index
@@ -378,9 +379,9 @@ export default {
 			}	
 		},		
 		goToLive() {						
-			// this._toast('视频功能暂未开放！')			
+			this._toast('视频功能暂未开放！')			
 			//暂不开放视频直播页面
-			this.$router.push({path:'/channel/items/live',query:{cid:this.cid}})
+			// this.$router.push({path:'/channel/items/live',query:{cid:this.cid}})
 		},
 		_toast (msg) {
 			this.msg = msg
