@@ -162,7 +162,7 @@
           startX: this.startX,
           startY: this.startY,
           freeScroll: this.freeScroll,
-          mouseWheel: this.mouseWheel
+          mouseWheel: this.mouseWheel,          
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {

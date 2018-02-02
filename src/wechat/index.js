@@ -25,6 +25,7 @@ let configData = {
         'onMenuShareTimeline',
         'onMenuShareAppMessage',
         'chooseImage',
+        'previewImage',
         'startRecord', 
         'playVoice', 
         'stopRecord', 

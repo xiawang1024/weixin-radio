@@ -6,7 +6,7 @@
             <down-load class="load"></down-load>
         </div>
         <div class="video-wrap">
-            <video id="video" class="video-play" :src="liveStream" webkit-playsinline style="object-fit:cover" autoplay></video>
+            <video id="video" class="video-play" :src="liveStream" x5-playsinline="" playsinline="" webkit-playsinline="" style="object-fit:cover" autoplay></video>
             <div class="controls">
                 <div class="playOrPause">
                     <span
@@ -53,6 +53,7 @@ import DownLoad from '@/base/downLoad/downLoad'
 import { getChannelItem } from 'api/index'
 
 import dialogConf from 'common/js/dialog.js'
+
 
 export default {
   name:'live',
@@ -109,7 +110,7 @@ export default {
               this.playBtn = false
           }
       },
-      tabSwitch(index) {          
+      tabSwitch(index) {      
           this.tabIndex = index
           if(index == 0) {
                 this.isShowToast = true
