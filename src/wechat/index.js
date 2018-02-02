@@ -48,24 +48,7 @@ axios.post('https://a.weixin.hndt.com/at/sign',Qs.stringify({url:configData.url}
 })
 
 
-
-router.beforeEach((to, from, next) => {    
-    let storeShareConf = null;
-    let shareConf = null;   
-    let isChannel = to.name == 'channel'  
-    
-    setTimeout(() => {
-        storeShareConf = store.state.shareConf   
-        shareConf = initShareConf(isChannel, storeShareConf,to)  
-        wxReady(shareConf)   
-        
-    },600)
-    
-    
-    next()
-})
-
-function initShareConf (isChannel, storeShareConf, to) { 
+export function initShareConf (isChannel, storeShareConf, to) { 
     let currentTitle = isChannel ? DEFAULT_TITLE : `${storeShareConf && storeShareConf.name}`
     let currentLink = isChannel ? DEFAULT_LINK : `${configData.url}#${to.fullPath}`
     let currentImg = isChannel ? DEFAULT_IMGURL : `${HNDTHOST}${storeShareConf && storeShareConf.image}`
@@ -78,7 +61,7 @@ function initShareConf (isChannel, storeShareConf, to) {
     }  
 }
 
-function wxReady(shareConf) {
+export function wxReady(shareConf) {
     wx.ready(function() {
         wx.onMenuShareTimeline({
         title: shareConf.currentTitle, 

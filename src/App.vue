@@ -12,26 +12,40 @@
 <script>
 import WxAudio from '@/base/audio/audio'
 
+import { initShareConf, wxReady } from '@/wechat'
+
 export default {
-  name: 'app',
-  components:{
-    WxAudio
-  },
-  data() {
-    return {
-      transitionName:'fade'
-    }
-  },
-  watch: {
-    '$route' (to, from) {
-      const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length      
-      if(toDepth == fromDepth) {
-        this.transitionName = 'fade'
-      }else{
-        this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    name: 'app',
+    components:{
+      WxAudio
+    },
+    data() {
+      return {
+        transitionName:'fade'
       }
-    }
+    },
+    watch: {
+      '$route' (to, from) {
+
+        //页面切换动画
+        const toDepth = to.path.split('/').length
+        const fromDepth = from.path.split('/').length      
+        if(toDepth == fromDepth) {
+          this.transitionName = 'fade'
+        }else{
+          this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+        }
+
+        //分享设置				 				
+		setTimeout(() => {
+			this.$nextTick(() => {
+				let isChannel = to.name == 'channel'
+				let storeShareConf = this.$store.state.shareConf
+				let shareConf = initShareConf(isChannel, storeShareConf,to)
+				wxReady(shareConf)
+			})		
+		}, 1000);
+      }
   }
 }
 </script>
