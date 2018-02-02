@@ -25,28 +25,13 @@ export default {
   watch: {
     '$route' (to, from) {
       const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length
-      console.log('------------------------------------');
-      console.log(toDepth,fromDepth);
-      console.log('------------------------------------');
+      const fromDepth = from.path.split('/').length      
       if(toDepth == fromDepth) {
         this.transitionName = 'fade'
       }else{
         this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
       }
     }
-  },
-  mounted() {
-    console.log(this.$router)
-  	this.audio = document.getElementById('audio');
-    var me = this
-  	this.canPlay = true
-  	document.getElementsByTagName('body')[0].addEventListener('touchstart',() => {
-  		if(this.audio && this.audio.getAttribute('src') && this.canPlay){
-	  		this.audio.play()
-	  		me.canPlay = false
-	  	}
-  	})
   }
 }
 </script>
@@ -54,7 +39,7 @@ export default {
 <style scoped lang="stylus">
 .child-view 
   position: absolute
-  transition: all .3s cubic-bezier(.55,0,.1,1)
+  transition: all .5s cubic-bezier(.55,0,.1,1)
 .slide-left-enter, .slide-right-leave-active 
   opacity: 0
   transform: translate(30px, 0)
