@@ -19,6 +19,7 @@ import '@/common/stylus/index.styl'
 import 'vodal/common.css'
 import 'vodal/door.css'
 import 'vodal/slide-down.css'
+import 'common/player.css'
 
 fastclick.attach(document.body)
 

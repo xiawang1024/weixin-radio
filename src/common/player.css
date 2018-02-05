@@ -1,0 +1,17 @@
+chimee-control {
+    height: 1rem !important
+}
+chimee-control-wrap {
+    height: 1rem !important;
+    line-height: 1rem !important;
+}
+.chimee-flex-component svg {
+    width: 0.5rem !important;
+    height: 0.5rem !important
+}
+.chimee-flex-component{
+    height: 1rem !important
+}
+chimee-control-state.chimee-flex-component,chimee-screen.chimee-flex-component{
+    flex-basis:0.8rem !important
+}

@@ -5,17 +5,7 @@
             <img :src="channelLogo" alt="" class="img">
             <down-load class="load"></down-load>
         </div>
-        <div class="video-wrap">
-            <video id="video" class="video-play" :src="liveStream" x5-playsinline="" playsinline="" webkit-playsinline="" style="object-fit:cover" preload controls></video>
-            <!-- <div class="controls">
-                <div class="playOrPause">
-                    <span
-                        :class="playBtn ? 'icon-pause' : 'icon-play'"
-                        @click="playSwitch"
-                    ></span>
-                </div>
-            </div> -->
-        </div>
+        <div class="video-wrap" id="video"></div>                   
         <div class="tab">
             <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
             <span class="tab-item" :class="tabIndex == 1 ? 'z-crt' : ''" @click="tabSwitch(1)">评论</span>
@@ -54,13 +44,16 @@ import { getChannelItem } from 'api/index'
 
 import dialogConf from 'common/js/dialog.js'
 
+import Chimee from 'chimee'
+import hls from 'chimee-kernel-hls';
+import chimeePluginMobileControlbar from 'chimee-plugin-mobile-controlbar';
+Chimee.install(chimeePluginMobileControlbar);
 
 export default {
     name:'live',
     components:{
         Scroll,
-        CommentList,
-        //   Toast,
+        CommentList,        
         DownLoad
     },
     data() {
@@ -80,8 +73,31 @@ export default {
     },
     mounted() {
         this.video = document.querySelector('#video')
+        this._initVideoPlay()
     },
     methods:{
+        _initVideoPlay() {           
+            this.chimee = new Chimee({
+                wrapper: '#video',
+                // src: 'http://cdn.toxicjohann.com/lostStar.mp4',
+                box:'native',
+                plugin: [{
+                    name:chimeePluginMobileControlbar.name,
+                    majorColor:'#0081dc'
+                }],
+                controls: true,
+                autoplay: true ,
+                kernels: {                    
+                    hls
+                } ,
+                isLive:hls,
+                preload: true,
+                x5VideoPlayerFullscreen: true,
+                x5VideoOrientation: true,
+                xWebkitAirplay: true,
+                // muted: true
+            })           
+        },
         _parseQuery() {
                 let query = this.$route.query
                 let cid = query.cid;
@@ -91,8 +107,8 @@ export default {
                         let data = res.data
                         this.$store.dispatch('setShareConf',data)
                         this.channelLogo  = `http://program.hndt.com${data.image}`;
-                        this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'
-                        // this.video.setAttribute('src',this.liveStream)
+                        this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'      
+                        this.chimee.load(this.liveStream);                  
                     })
                 }
         },
@@ -130,6 +146,23 @@ export default {
 
 <style lang="stylus" scoped>
 @import '~common/stylus/mixin.styl'
+container
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background #ffffff
+video 
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #ffffff;
+video:focus,
+video:active 
+  outline: none;
+video::-webkit-media-controls-start-playback-button 
+  display: none;
+
 .live
     width 100%
     background #fff
