@@ -180,9 +180,9 @@ export default {
 				if(!this.audio.getAttribute('src')){					
 					this._playSrc(this.liveStream)										
 				}
-				setTimeout(() => {
-					this._isPlay(data.programs)					
-				},20)
+				this.$nextTick(() => {
+					this._isPlay(data.programs)								
+				})				
 			})
 		},
 		_isPlay(programs) {
@@ -190,16 +190,26 @@ export default {
 			for(let i =0 ;i<programs.length;i++){
 				var item = programs[i];
 				if(currentTime <= item.endTime && currentTime >= item.beginTime){
-					this.isPlayIndex = i;
-					this._scrollTo(this.isPlayIndex)
+					this.isPlayIndex = i;					
+					setTimeout(() => {
+						this._scrollTo(this.isPlayIndex)
+					},600)
 					return
 				}
 			}
 		},
 		_scrollTo(index){
-			let listHeight = this.$refs.list[0].clientHeight;
-			let offsetY = parseInt(listHeight) * index			
-			this.$refs.listview.scroll && this.$refs.listview.scroll.scrollTo(0,-offsetY,1000)
+			let listHeight = parseInt(this.$refs.list[0].clientHeight); //单行高
+			let len = this.itemsList.length //行数
+			let ContainHeight = this.$refs.listview.$el.clientHeight //滚动区域高度
+			let offsetY = listHeight * index //需要滚动的高度
+			let maxOffsetY = listHeight * len - ContainHeight //最大滚动的高度
+
+			let scrollY = Math.min(maxOffsetY,offsetY)
+			if(scrollY < 0) {
+				scrollY = 0
+			}								
+			this.$refs.listview.scroll && this.$refs.listview.scroll.scrollTo(0,-scrollY,1000)
 		},
 		_scrollTop(){
 			this.$refs.listview.scroll && this.$refs.listview.scroll.scrollTo(0,0,1000)
@@ -379,9 +389,9 @@ export default {
 			}	
 		},		
 		goToLive() {						
-			this._toast('视频功能暂未开放！')			
+			// this._toast('视频功能暂未开放！')			
 			//暂不开放视频直播页面
-			// this.$router.push({path:'/channel/items/live',query:{cid:this.cid}})
+			this.$router.push({path:'/channel/items/live',query:{cid:this.cid}})
 		},
 		_toast (msg) {
 			this.msg = msg
