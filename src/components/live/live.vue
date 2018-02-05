@@ -45,9 +45,9 @@ import { getChannelItem } from 'api/index'
 import dialogConf from 'common/js/dialog.js'
 
 import Chimee from 'chimee'
-import hls from 'chimee-kernel-hls';
 import chimeePluginMobileControlbar from 'chimee-plugin-mobile-controlbar';
 Chimee.install(chimeePluginMobileControlbar);
+import hls from 'chimee-kernel-hls';
 
 export default {
     name:'live',
@@ -71,16 +71,13 @@ export default {
     created() {
         this._parseQuery()
     },
-    mounted() {
-        this.video = document.querySelector('#video')
+    mounted() {        
         this._initVideoPlay()
     },
     methods:{
         _initVideoPlay() {           
             this.chimee = new Chimee({
-                wrapper: '#video',
-                // src: 'http://cdn.toxicjohann.com/lostStar.mp4',
-                box:'native',
+                wrapper: '#video',                               
                 plugin: [{
                     name:chimeePluginMobileControlbar.name,
                     majorColor:'#0081dc'
@@ -90,7 +87,7 @@ export default {
                 kernels: {                    
                     hls
                 } ,
-                isLive:hls,
+                isLive:true,
                 preload: true,
                 x5VideoPlayerFullscreen: true,
                 x5VideoOrientation: true,
@@ -117,16 +114,7 @@ export default {
         },
         goToItem() {
             this.$router.push({path:'/channel/items',query:{cid:this.cid}})
-        },
-        playSwitch() {          
-            if(this.video.paused) {
-                this.video.play()
-                this.playBtn = true;
-            }else{
-                this.video.pause()
-                this.playBtn = false
-            }
-        },
+        },        
         tabSwitch(index) {      
             this.tabIndex = index
             if(index == 0) {
@@ -146,23 +134,6 @@ export default {
 
 <style lang="stylus" scoped>
 @import '~common/stylus/mixin.styl'
-container
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background #ffffff
-video 
-  width: 100%;
-  height: 100%;
-  display: block;
-  background-color: #ffffff;
-video:focus,
-video:active 
-  outline: none;
-video::-webkit-media-controls-start-playback-button 
-  display: none;
-
 .live
     width 100%
     background #fff
