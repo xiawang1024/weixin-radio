@@ -1,7 +1,5 @@
 function adustFontSize() {
 	let isAndroid = (/android/gi).test(window.navigator.appVersion)
-	let dpr = window.devicePixelRatio
-	console.log(isAndroid)
 	if(isAndroid) {
 		
 		return {
