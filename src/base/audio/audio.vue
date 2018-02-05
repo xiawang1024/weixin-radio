@@ -7,9 +7,22 @@
 <script>
 import audioAutoPlay from 'common/js/audioAutoPlay'
 export default {
-  mounted () {
-    audioAutoPlay('audio')
-  }
+	mounted () {
+		this.audio = document.getElementById('audio')
+		audioAutoPlay('audio')
+	},
+	watch:{
+		'$route' (to, from) {
+			console.log(to)
+			let pathName = to.name
+			if(pathName == 'live') {
+				this.audio.pause()
+			}else{
+				this.audio.play()
+			}
+
+		}
+	}
 }
 </script>
 
