@@ -82,10 +82,8 @@ export default {
     height $items-date-height    
     line-height $items-date-height
     background #fff
-    border-bottom 0.5px solid $color
+    border-bottom 0.5px solid $color    
     box-sizing border-box
-    overflow-x hidden
-    white-space nowrap
     .date
         position: relative
         display inline-block
@@ -99,7 +97,7 @@ export default {
             font-size 28px
         .day
             display block
-            widht 100%
+            width 100%
             height 60px
             line-height 30px
             font-size 26px
