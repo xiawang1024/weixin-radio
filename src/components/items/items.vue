@@ -197,10 +197,11 @@ export default {
 				if(!this.audio.getAttribute('src')){					
 					this._playSrc(this.liveStream)										
 				}
-				setTimeout(() => {
+				this.$nextTick(() => {
 					this._isPlay(data.programs)
 					this._share()
-				},20)
+				})
+				
 			})
 		},
 		_isPlay(programs) {
@@ -209,7 +210,9 @@ export default {
 				var item = programs[i];
 				if(currentTime <= item.endTime && currentTime >= item.beginTime){
 					this.isPlayIndex = i;
-					this._scrollTo(this.isPlayIndex)
+					setTimeout(() => {
+						this._scrollTo(this.isPlayIndex)
+					},600)
 					return
 				}
 			}
