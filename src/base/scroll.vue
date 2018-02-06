@@ -46,8 +46,8 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-  import Loading from '@/base/loading.vue'
-  import Bubble from '@/base/bubble.vue'
+  import Loading from '@/base/loading'
+  import Bubble from '@/base/bubble'
   import { getRect } from 'common/js/dom'
   const COMPONENT_NAME = 'scroll'
   const DIRECTION_H = 'horizontal'
@@ -92,6 +92,10 @@
       pullUpLoad: {
         type: null,
         default: false
+      },
+      startX:{
+          type:Number,
+          default:0
       },
       startY: {
         type: Number,
@@ -155,9 +159,10 @@
           scrollbar: this.scrollbar,
           pullDownRefresh: this.pullDownRefresh,
           pullUpLoad: this.pullUpLoad,
+          startX: this.startX,
           startY: this.startY,
           freeScroll: this.freeScroll,
-          mouseWheel: this.mouseWheel
+          mouseWheel: this.mouseWheel,          
         }
         this.scroll = new BScroll(this.$refs.wrapper, options)
         if (this.listenScroll) {
