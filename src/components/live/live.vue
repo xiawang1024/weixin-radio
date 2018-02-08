@@ -5,29 +5,42 @@
             <img :src="channelLogo" alt="" class="img">
             <down-load class="load"></down-load>
         </div>
-        <div class="video-wrap" id="video"></div>                   
+        <div class="video-wrap" >
+            <transition name="fade">
+                <div class="video-control" v-show="videoControl">
+                    <div class="state" @click="playVideo">
+                        <span class="icon-play" ></span>
+                    </div>
+                </div>
+            </transition>
+            <video 
+                @click.stop="pauseVideo" 
+                @timeupdate="timeUpdate" 
+                @waiting="waiting" 
+                          
+                id="video" src="http://cdn.toxicjohann.com/lostStar.mp4" x-webkit-airplay='true'  x5-video-player-type="h5" playsinline="true" webkit-playsinline style="object-fit:fill" preload="auto"></video>
+        </div>                   
         <div class="tab">
             <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
             <span class="tab-item" :class="tabIndex == 1 ? 'z-crt' : ''" @click="tabSwitch(1)">评论</span>
         </div>
-    <!-- <div class="tab-item recommend-tab" v-show="tabBtn">
-        <div class="item" v-for="n of 10">
-            <div class="img-wrap">
-                <img src="http://www.hndt.com/wap/978/1891990/res/8VCcCFWS.jpg?1498869074099" alt="" class="img">
+        <!-- <div class="tab-item recommend-tab" v-show="tabBtn">
+            <div class="item" v-for="n of 10">
+                <div class="img-wrap">
+                    <img src="http://www.hndt.com/wap/978/1891990/res/8VCcCFWS.jpg?1498869074099" alt="" class="img">
+                </div>
+                <div class="text-wrap">
+                    <h2 class="title">王者局排位韩信王者局排位韩信王者局排位韩信</h2>
+                    <p class="desc">河南广电全媒体贯彻落实习近平河南广电全媒体贯彻落实习近平</p>
+                </div>
             </div>
-            <div class="text-wrap">
-                <h2 class="title">王者局排位韩信王者局排位韩信王者局排位韩信</h2>
-                <p class="desc">河南广电全媒体贯彻落实习近平河南广电全媒体贯彻落实习近平</p>
-            </div>
-        </div>
-    </div>           -->
+        </div> -->
         <comment-list 
             class="comment-list"
             ref="child"
             :cid="cid"
             v-show="tabIndex == 1" 			
-        ></comment-list>
-        <!-- <toast :isShowToast="isShowToast" :msg="msg"></toast> -->
+        ></comment-list>        
         <vodal className="my-dialog" :width="4" :height='1.6' measure="rem" :mask="false" :closeButton="false" :duration="301" :show="isShowToast" animation="zoom" @hide="isShowToast = false" :customStyles="customStyles">			
 			{{msg}}			
 		</vodal>
@@ -44,10 +57,6 @@ import { getChannelItem } from 'api/index'
 
 import dialogConf from 'common/js/dialog.js'
 
-import Chimee from 'chimee'
-import chimeePluginMobileControlbar from 'chimee-plugin-mobile-controlbar';
-Chimee.install(chimeePluginMobileControlbar);
-import hls from 'chimee-kernel-hls';
 
 export default {
     name:'live',
@@ -65,36 +74,35 @@ export default {
             playBtn:true,          
             tabIndex:1,
             msg:'暂未开通功能！',
-            isShowToast:false
+            isShowToast:false,
+            videoControl:true
         }
     },
     created() {
         this._parseQuery()
     },
     mounted() {        
-        this._initVideoPlay()
+       this.video = document.getElementById('video')
     },
     methods:{
-        _initVideoPlay() {           
-            this.chimee = new Chimee({
-                wrapper: '#video',                               
-                plugin: [{
-                    name:chimeePluginMobileControlbar.name,
-                    majorColor:'#0081dc'
-                }],
-                controls: true,
-                autoplay: true ,
-                kernels: {                    
-                    hls
-                } ,
-                isLive:true,
-                preload: true,
-                x5VideoPlayerFullscreen: true,
-                x5VideoOrientation: true,
-                xWebkitAirplay: true,
-                // muted: true
-            })           
+        playVideo() {           
+            this.video.play()            
         },
+        pauseVideo() {
+            this.videoControl = true
+            this.video.pause()
+            alert(11)
+        },
+        timeUpdate(e) {
+            // console.log(e)
+            this.videoControl = false            
+        },
+        playing() {
+            // this.videoControl = false
+        },
+        waiting(e) {
+            this.videoControl = true
+        },        
         _parseQuery() {
                 let query = this.$route.query
                 let cid = query.cid;
@@ -134,6 +142,10 @@ export default {
 
 <style lang="stylus" scoped>
 @import '~common/stylus/mixin.styl'
+.fade-enter-active, .fade-leave-active
+    transition: opacity 0.5s
+.fade-enter, .fade-leave-to
+    opacity 0
 .live
     width 100%
     background #fff
@@ -143,7 +155,7 @@ export default {
         height $items-hd-height
         line-height $items-hd-height
         text-align center
-        border-1px($color)
+        // border-1px($color)
         font-size 0
         .img
             vertical-align middle
@@ -167,7 +179,32 @@ export default {
         height 421px
         overflow hidden
         background #ffffff
-        // border-1px($color)
+        .video-control
+            position absolute
+            top 0
+            left 0
+            bottom 0
+            right 0
+            background rgba(0,0,0,0.8)
+            .state
+                position absolute
+                z-index 10
+                top 0
+                left 0
+                bottom 0
+                right 0
+                width 180px
+                height 180px
+                margin auto auto
+                .icon-loading
+                    display inline-block
+                    width 180px
+                    height 180px
+                    background url('./loading.gif') center center no-repeat 
+                    background-size cover
+                .icon-play,.icon-pause
+                    font-size 180px
+                    color #ffffff
         .video-play
             width 100%            
         .controls
