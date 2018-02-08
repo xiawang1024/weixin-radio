@@ -16,8 +16,7 @@
             <video 
                 @click.stop="pauseVideo" 
                 @timeupdate="timeUpdate" 
-                @waiting="waiting" 
-                          
+                @waiting="waiting"                           
                 id="video" src="http://cdn.toxicjohann.com/lostStar.mp4" x-webkit-airplay='true'  x5-video-player-type="h5" playsinline="true" webkit-playsinline style="object-fit:fill" preload="auto"></video>
         </div>                   
         <div class="tab">
@@ -89,9 +88,10 @@ export default {
             this.video.play()            
         },
         pauseVideo() {
-            this.videoControl = true
             this.video.pause()
-            alert(11)
+            this.$nextTick(() => {
+                this.videoControl = true
+            })
         },
         timeUpdate(e) {
             // console.log(e)
