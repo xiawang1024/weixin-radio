@@ -62,5 +62,5 @@ export default {
 .fade-enter-active, .fade-leave-active
   transition: opacity 0.5s
 .fade-enter, .fade-leave-to
-  opctity 0
+  opacity 0
 </style>
