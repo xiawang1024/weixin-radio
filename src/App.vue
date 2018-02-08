@@ -15,25 +15,24 @@ import WxAudio from '@/base/audio/audio'
 import { initShareConf, wxReady } from '@/wechat'
 
 export default {
-		name: 'app',
-		components:{
-			WxAudio
-		},
-		data() {
-			return {
-				transitionName:'fade'
-			}
-		},
-		watch: {
-			'$route' (to, from) {
-
+	name: 'app',
+	components:{
+		WxAudio
+	},
+	data() {
+		return {
+			transitionName:'fade'
+		}
+	},
+	watch: {
+		'$route' (to, from) {
 			//页面切换动画
-			const toDepth = to.path.split('/').length
-			const fromDepth = from.path.split('/').length      
-			if(toDepth == fromDepth) {
+			if(from.fullPath == '/') {
 				this.transitionName = 'fade'
 			}else{
-				this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+				const toDepth = to.meta.path.split('/').length
+				const fromDepth = from.meta.path.split('/').length      				
+				this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'				
 			}
 
 			//分享设置				 				
@@ -61,7 +60,7 @@ export default {
   opacity: 0
   transform: translate(-30px, 0)
 .fade-enter-active, .fade-leave-active
-  transition: opacity 0.3s
+  transition: opacity 0.5s
 .fade-enter, .fade-leave-to
   opctity 0
 </style>

@@ -13,22 +13,34 @@ export default new Router({
   routes: [{
       path: '/',
       name:'root',
-      redirect: '/channel'
+      redirect: '/channel',
+      meta:{
+        path:'/'
+      }
     },
     {
       path: '/channel',
       name: 'channel',
-      component: Channel
+      component: Channel,
+      meta:{
+        path:'/channel'
+      }
     },
     {
-      path: '/channel/items',
+      path: '/items',
       name: 'items',
-      component: Items
+      component: Items,
+      meta:{
+        path:'/channel/items'
+      }
     },
     {
-      path: '/channel/items/live',
+      path: '/live',
       name: 'live',
-      component: Live
+      component: Live,
+      meta:{
+        path:'/channel/items/live'
+      }
     }
   ]
 })
