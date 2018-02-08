@@ -49,7 +49,7 @@
 			<div class="item" :class="{'z-crt':tabIndex == 1}" @click="tabSwitch(1)"><i class="icon-comment"></i><span>互动</span></div>
 		</div>	
 		<!-- 回听start	 -->
-		<div class="itemsList" v-show="tabIndex == 0">			
+		<div v-if="itemsList.length > 0" class="itemsList" v-show="tabIndex == 0">			
 			<keep-alive>
 				<date-pick
 					@clickItem="getDatePrograms"
