@@ -61,7 +61,7 @@ export default {
             customStyles:dialogConf,//模态框css配置
             cid:'',
             channelLogo:'',
-            liveStream:'http://www.hndt.com/h5/shows/12/videos/1.mp4',
+            liveStream:'http://ivi.bupt.edu.cn/hls/cctv13.m3u8',
             playBtn:true,          
             tabIndex:1,
             msg:'暂未开通功能！',
@@ -104,8 +104,8 @@ export default {
                         let data = res.data
                         this.$store.dispatch('setShareConf',data)
                         this.channelLogo  = `http://program.hndt.com${data.image}`;
-                        this.liveStream = data.video_streams[0] || 'http://www.hndt.com/h5/shows/12/videos/1.mp4'      
-                        this.chimee.load(this.liveStream);                  
+                        this.liveStream = data.video_streams[0] || 'http://ivi.bupt.edu.cn/hls/cctv13.m3u8'      
+                        this.chimee.load(this.liveStream);                                         
                     })
                 }
         },
@@ -113,7 +113,7 @@ export default {
             return Promise.resolve(getChannelItem(cid))
         },
         goToItem() {
-            this.$router.push({path:'/channel/items',query:{cid:this.cid}})
+            this.$router.push({path:'/items',query:{cid:this.cid}})
         },        
         tabSwitch(index) {      
             this.tabIndex = index
