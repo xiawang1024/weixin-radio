@@ -7,17 +7,18 @@
         </div>
         <div class="video-wrap" >
             <transition name="fade">
-                <div class="video-control" v-show="videoControl">
-                    <div class="state" @click="playVideo">
-                        <span class="icon-play" ></span>
+                <div class="video-control" v-show="videoControl" @click="playVideo">
+                    <div class="state">
+                        <span :class="videoAnimateTypeArr[videoAnimateType]" ></span>
                     </div>
                 </div>
             </transition>
             <video 
                 @click.stop="pauseVideo" 
                 @timeupdate="timeUpdate" 
-                @waiting="waiting"                           
-                id="video" src="http://cdn.toxicjohann.com/lostStar.mp4" x-webkit-airplay='true'  x5-video-player-type="h5" playsinline="true" webkit-playsinline style="object-fit:fill" preload="auto"></video>
+                @waiting="waiting"   
+                @playing="playing"                                                   
+                id="video" x-webkit-airplay='true'  x5-video-player-type="h5" playsinline="true" webkit-playsinline style="object-fit:fill" preload="auto"></video>
         </div>                   
         <div class="tab">
             <span class="tab-item" :class="tabIndex == 0 ? 'z-crt' : ''" @click="tabSwitch(0)">推荐</span>
@@ -54,6 +55,8 @@ import DownLoad from '@/base/downLoad/downLoad'
 
 import { getChannelItem } from 'api/index'
 
+import { isPc } from 'common/js/isPc.js'
+
 import dialogConf from 'common/js/dialog.js'
 
 
@@ -74,7 +77,9 @@ export default {
             tabIndex:1,
             msg:'暂未开通功能！',
             isShowToast:false,
-            videoControl:true
+            videoControl:true,
+            videoAnimateTypeArr:['icon-play','icon-loading'],
+            videoAnimateType:0
         }
     },
     created() {
@@ -93,14 +98,15 @@ export default {
                 this.videoControl = true
             })
         },
-        timeUpdate(e) {
-            // console.log(e)
+        timeUpdate(e) {            
             this.videoControl = false            
-        },
-        playing() {
-            // this.videoControl = false
-        },
-        waiting(e) {
+        },  
+        playing (e) {
+            this.videoControl = false;
+            this.videoAnimateType = 0
+        },     
+        waiting(e) {            
+            this.videoAnimateType = 1
             this.videoControl = true
         },        
         _parseQuery() {
@@ -112,8 +118,9 @@ export default {
                         let data = res.data
                         this.$store.dispatch('setShareConf',data)
                         this.channelLogo  = `http://program.hndt.com${data.image}`;
-                        this.liveStream = data.video_streams[0] || 'http://ivi.bupt.edu.cn/hls/cctv13.m3u8'      
-                        this.chimee.load(this.liveStream);                                         
+                        this.liveStream = data.video_streams[0] || 'http://ivi.bupt.edu.cn/hls/cctv13.m3u8'     
+                         
+                        this._playSrc(this.liveStream)                                         
                     })
                 }
         },
@@ -134,7 +141,44 @@ export default {
             this.$nextTick(() => {
                 this.$refs.child.refresh()
             })	
-        }
+        },
+        _playSrc(stream) {        			
+			if(this._isPc() && this._isM3u8(stream)){
+				this._playHlsSrc(stream)                
+			}else{
+				this.video.setAttribute('src',stream)
+			}			
+		},
+        //判断是否是pc设备
+		_isPc(){
+			if(isPc() == 'pc'){
+				return true
+			}else{
+				return false
+			}
+		},
+		//判断是否是m3u8
+		_isM3u8(stream) {
+			let patt = /m3u8$/;
+			return patt.test(stream)
+		},
+		//pc设备通过hls.js插件播放，异步加载hls.js
+		_playHlsSrc(stream){
+            
+			if(this._isPc()){
+				require.ensure([], () => {
+					const Hls = require('hls')
+					this.hls = new Hls();
+					if(Hls.isSupported()) {
+						this.hls.loadSource(stream);
+						this.hls.attachMedia(this.video);
+						this.hls.on(Hls.Events.MANIFEST_PARSED,function() {
+							// this.video.play();
+						});
+					}
+				})
+			}
+		},
     }
 }
 </script>
@@ -204,20 +248,7 @@ export default {
                     background-size cover
                 .icon-play,.icon-pause
                     font-size 180px
-                    color #ffffff
-        .video-play
-            width 100%            
-        .controls
-            position absolute
-            left 0
-            bottom 0
-            width 100%
-            height 100px
-            text-align right 
-            .icon-play,.icon-pause       
-                margin-right 30px         
-                font-size 80px
-                color #ffffff
+                    color #ffffff                   
     .tab
         width 100%
         height 100px
