@@ -172,7 +172,7 @@ export default {
 				this.itemsInfo = data;
 				this.itemsList = data.programs;			
 				if(data.cid == 120) {					
-					this.liveStream = 'http://stream.hndt.com:1935/live2/1061_aac/playlist.m3u8'
+					this.liveStream = 'http://stream.hndt.com/live2/1061_aac/playlist.m3u8'
 				}else{
 					this.liveStream = data.streams[0];
 				}

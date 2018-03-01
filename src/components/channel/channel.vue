@@ -106,7 +106,7 @@ export default {
 		setTimeout(() => {
 			if(!document.getElementById('audio').getAttribute('src')){
 				// this.audio.setAttribute('src','http://stream.hndt.com:1935/live/xinwen/playlist.m3u8')
-				let stream = 'http://stream.hndt.com:1935/live/xinwen/playlist.m3u8';//进入首页默认播放新闻广播
+				let stream = 'http://stream.hndt.com/live/xinwen/playlist.m3u8';//进入首页默认播放新闻广播
 				this.playSrc(-1, stream)
 			}
 		},20)
