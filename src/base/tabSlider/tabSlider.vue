@@ -59,7 +59,7 @@
     data() {
       return {
         dots: [],
-        tabArr:['河南台','网络台','市县台'],
+        tabArr:['河南台','网络台','市县台','央广台'],
         currentPageIndex: 0
       }
     },

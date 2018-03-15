@@ -34,10 +34,26 @@ const getCommentList = (id,toId=-1,page=1) => axios.get('http://talk.hndt.com/hn
 	}
 })
 
+// 央广音频源
+
+import jsonp from 'common/js/jsonp.js'
+
+// 直播
+const getChinaLive = (date) => {
+	let url = 'http://tacc.radio.cn/pcpages/radiopages'
+	let data = {
+		place_id:3225,
+		date:date,
+		_:1520582584099
+	}
+	return jsonp(url,data)
+}
+
 export {
 	getLiveItem,
 	getClassItem,
 	getChannelItem,
 	clickItem,
-	getCommentList
+	getCommentList,
+	getChinaLive
 }

@@ -24,7 +24,7 @@
 				<div class="scroll">
 					<div v-for="item in group" :key="item.image" class="items" @click="goToItems(item.cid,item.streams[0])" :class="item.cid == isPlayIndex ? 'isLivePlay' : ''">
 						<div class="icon item">
-							<img :src="'http://program.hndt.com' + item.image" class="img">
+							<img :src="item.image.indexOf('http://')==-1 ? 'http://program.hndt.com' + item.image : item.image" class="img">
 						</div>
 						<div class="live-info item">
 							<p class="name">
@@ -56,10 +56,10 @@ import Scroll from '@/base/scroll/scroll'
 import Wave from '@/base/wave/wave'
 import DownLoad from '@/base/downLoad/downLoad'
 
-import {getClassItem} from "api/index"
+import { getClassItem, getChinaLive } from "api/index"
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 
-const TAB_ARR = ['河南台','网络台','市县台']
+const TAB_ARR = ['河南台','网络台','市县台','央广台']
 export default {
 	name:'channel',
 	components:{
@@ -99,7 +99,9 @@ export default {
 	created() {
 		this._getClassItem();
 		this._parseQuery()
-		this.itemsData = new Array(3)
+		this.itemsData = new Array()
+
+		
 	},
 	mounted() {
 		this.audio = document.getElementById('audio');
@@ -112,6 +114,25 @@ export default {
 		},20)
 	},
 	methods:{
+		// 央广数据处理
+		_chinaFormdata(oldArr) {
+			let newArr = []
+			let len = oldArr.length;
+			
+			for(let i=0,j=1000;i<len;i++){
+				let item = oldArr[i]
+				newArr.push({
+					cid:j+i,
+					description:item.description,
+					image:item.icon[2].url,
+					live:item.name,
+					name:item.name,
+					streams:[item.streams[0].url],
+					time:''
+				})
+			}
+			return newArr
+		},
 		onPullingDown() {
 			this.loading = true
 			// 更新数据
@@ -126,6 +147,17 @@ export default {
 					return res.data
 				})
 			})
+			let getChinaData = () => {
+
+				return new Promise((resolve,reject) => {
+					getChinaLive('2018-03-15').then((res) => {
+						let newArr = this._chinaFormdata(res.data.channel)
+						resolve(newArr) 
+					})
+				})
+				
+			}			
+			promises.push(getChinaData())
 			Promise.all(promises).then((res) => {
 				this.itemsData = res
 				// setTimeout(() => {this.itemsData = res},3000) // 模拟网络延迟加载动画
