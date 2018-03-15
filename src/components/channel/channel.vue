@@ -133,6 +133,15 @@ export default {
 			}
 			return newArr
 		},
+		// 获取当前日期
+		_getToday() {
+			let time = new Date()
+			let year = time.getFullYear()
+			let month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1): time.getMonth() + 1;
+			let day = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+			let dateStr = year + "-" + month + "-" + day;
+			return dateStr
+		},
 		onPullingDown() {
 			this.loading = true
 			// 更新数据
@@ -150,7 +159,7 @@ export default {
 			let getChinaData = () => {
 
 				return new Promise((resolve,reject) => {
-					getChinaLive('2018-03-15').then((res) => {
+					getChinaLive(this._getToday()).then((res) => {
 						let newArr = this._chinaFormdata(res.data.channel)
 						resolve(newArr) 
 					})
