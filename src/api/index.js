@@ -49,11 +49,26 @@ const getChinaLive = (date) => {
 	return jsonp(url,data)
 }
 
+//点播
+import { timeStampToDate } from 'common/js/util.js'
+const getChinaPlayBack = (oldDate,oldChannel_id) => {
+// http://tacc.radio.cn/pcpages/liveSchedules?callback=jQuery112201418440806869472_1521187524444&date=2018-03-15&channel_id=1&_=1521187524446
+	let date = timeStampToDate(oldDate)
+	let channel_id = oldChannel_id - 1000;
+	let url = 'http://tacc.radio.cn/pcpages/liveSchedules';
+	let data = {
+		date,
+		channel_id
+	}
+	return jsonp(url,data)
+}
+
 export {
 	getLiveItem,
 	getClassItem,
 	getChannelItem,
 	clickItem,
 	getCommentList,
-	getChinaLive
+	getChinaLive,
+	getChinaPlayBack
 }
