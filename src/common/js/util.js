@@ -15,7 +15,7 @@ export function _pad(num, n = 2) {
 
 /**
  * 获取today 
- * 格式： 2018-03-15
+ * 返回格式： 2018-03-15
  */
 export function getToday() {
   let time = new Date()
@@ -26,7 +26,11 @@ export function getToday() {
   return dateStr
 }
 
-
+/**
+ * 日期格式转时间戳
+ * 日期格式2015-03-05 00:00:00.0
+ * 返回时间戳
+ */
 export function toTimeStamp(date) {
   // var date = '2015-03-05 00:00:00.0';
   date = date.substring(0,19);
@@ -35,6 +39,10 @@ export function toTimeStamp(date) {
   return timestamp/1000;
 }
 
+/**
+ * 时间戳转日期格式
+ * 返回格式 2018-03-15
+ */
 export function timeStampToDate(nS) {
   let time = new Date(parseInt(nS*1000))
   let year = time.getFullYear()

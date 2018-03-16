@@ -69,7 +69,7 @@
 							@click="playBackSrc(item,index)"
 						>
 							<i v-show="index === isPlayIndex && isToDay" class="icon-LIVE"></i>
-							<span v-show="item.playUrl && item.playUrl.length > 0 && index !== isPlayIndex" class="playback">回听</span>
+							<span v-show="item.playUrl && item.playUrl[0] && index !== isPlayIndex" class="playback">回听</span>
 						</span>
 					</div>
 				</div>
@@ -105,7 +105,7 @@ import { getChannelItem, clickItem, getCommentList, getChinaPlayBack } from 'api
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import dialogConf from 'common/js/dialog.js'
-import { _pad } from 'common/js/util'
+import { _pad, toTimeStamp } from 'common/js/util'
 
 import COMMENTLIST from './comment.js'
 
@@ -171,7 +171,16 @@ export default {
 
 			if(Number(cid)>1000) {
 				getChinaPlayBack(todayStamp, cid).then((res) => {
-					console.log(res.data)
+					let data = res.data.program;
+					
+					this.itemsList = this._formatChina(data)
+
+					if(!this.audio.getAttribute('src')){					
+						this._playSrc(this.liveStream)										
+					}
+					this.$nextTick(() => {
+						this._isPlay(this.itemsList)								
+					})	
 				})
 			}else{
 				clickItem(cid, todayStamp).then((res) => {
@@ -183,18 +192,37 @@ export default {
 						this.liveStream = 'http://stream.hndt.com/live2/1061_aac/playlist.m3u8'
 					}else{
 						this.liveStream = data.streams[0];
-					}
-									
+					}	
+
 					if(!this.audio.getAttribute('src')){					
 						this._playSrc(this.liveStream)										
 					}
 					this.$nextTick(() => {
 						this._isPlay(data.programs)								
-					})				
+					})								
 				})
 			}
+						
+		},
+		//央广数据处理
+		_formatChina(oldArr) {	
+			
+			let newArr = oldArr.map((item, index) => {
+				return {
+					beginTime:toTimeStamp(`2018-03-16 ${item.start}`),
+					endTime:toTimeStamp(`2018-03-16 ${item.end}`),					
+					playUrl:[item.stream[0].url],					
+					title:item.programName
+				}
+			})
+
+			return newArr
+			
 		},
 		_isPlay(programs) {
+			console.log('------------------------------------');
+			console.log(programs[0].endTime);
+			console.log('------------------------------------');
 			let currentTime = (new Date()).getTime()/1000 | 0;//当前时间时间戳
 			for(let i =0 ;i<programs.length;i++){
 				var item = programs[i];
