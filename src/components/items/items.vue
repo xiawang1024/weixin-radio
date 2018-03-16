@@ -101,7 +101,7 @@ import ProgressBar from '@/base/progressBar/progressBar'
 import DownLoad from '@/base/downLoad/downLoad'
 import CommentList from '@/base/commentList/commentList'
 
-import { getChannelItem, clickItem, getCommentList } from 'api/index'
+import { getChannelItem, clickItem, getCommentList, getChinaPlayBack } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import dialogConf from 'common/js/dialog.js'
@@ -165,25 +165,34 @@ export default {
 			})
 		},
 		_getChannelItem(cid) {
-			let todayStamp = this._timeToStamp(this._getToDay());
-			clickItem(cid, todayStamp).then((res) => {
-				let data = res.data;
-				this.$store.dispatch('setShareConf',data)
-				this.itemsInfo = data;
-				this.itemsList = data.programs;			
-				if(data.cid == 120) {					
-					this.liveStream = 'http://stream.hndt.com/live2/1061_aac/playlist.m3u8'
-				}else{
-					this.liveStream = data.streams[0];
-				}
-								
-				if(!this.audio.getAttribute('src')){					
-					this._playSrc(this.liveStream)										
-				}
-				this.$nextTick(() => {
-					this._isPlay(data.programs)								
-				})				
-			})
+			let todayStamp = this._timeToStamp(this._getToDay());			
+			
+			//cid >= 1001 为央广
+
+			if(Number(cid)>1000) {
+				getChinaPlayBack(todayStamp, cid).then((res) => {
+					console.log(res.data)
+				})
+			}else{
+				clickItem(cid, todayStamp).then((res) => {
+					let data = res.data;
+					this.$store.dispatch('setShareConf',data)
+					this.itemsInfo = data;
+					this.itemsList = data.programs;			
+					if(data.cid == 120) {					
+						this.liveStream = 'http://stream.hndt.com/live2/1061_aac/playlist.m3u8'
+					}else{
+						this.liveStream = data.streams[0];
+					}
+									
+					if(!this.audio.getAttribute('src')){					
+						this._playSrc(this.liveStream)										
+					}
+					this.$nextTick(() => {
+						this._isPlay(data.programs)								
+					})				
+				})
+			}
 		},
 		_isPlay(programs) {
 			let currentTime = (new Date()).getTime()/1000 | 0;//当前时间时间戳
@@ -245,10 +254,10 @@ export default {
 			this.cid = cid;
 			if(cid){
 				this._getChannelItem(cid)
-				// this._getCommentList(cid)
+				
 			}else{
 				this._getChannelItem(1)
-				// this._getCommentList(1)
+				
 			}
 		},
 		goToChannel() {
