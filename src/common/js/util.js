@@ -12,3 +12,35 @@ export function _pad(num, n = 2) {
     }
     return num
 }
+
+/**
+ * 获取today 
+ * 格式： 2018-03-15
+ */
+export function getToday() {
+  let time = new Date()
+  let year = time.getFullYear()
+  let month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1): time.getMonth() + 1;
+  let day = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+  let dateStr = year + "-" + month + "-" + day;
+  return dateStr
+}
+
+
+export function toTimeStamp(date) {
+  // var date = '2015-03-05 00:00:00.0';
+  date = date.substring(0,19);
+  date = date.replace(/-/g,'/');
+  var timestamp = new Date(date).getTime();
+  return timestamp/1000;
+}
+
+export function timeStampToDate(nS) {
+  let time = new Date(parseInt(nS*1000))
+  let year = time.getFullYear()
+  let month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1): time.getMonth() + 1;
+  let day = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+  let dateStr = year + "-" + month + "-" + day;
+  return dateStr
+  
+}
