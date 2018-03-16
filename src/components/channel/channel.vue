@@ -58,6 +58,7 @@ import DownLoad from '@/base/downLoad/downLoad'
 
 import { getClassItem, getChinaLive } from "api/index"
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
+import {getToday} from 'common/js/util.js'
 
 const TAB_ARR = ['河南台','网络台','市县台','央广台']
 export default {
@@ -122,7 +123,7 @@ export default {
 			for(let i=0,j=1000;i<len;i++){
 				let item = oldArr[i]
 				newArr.push({
-					cid:j+i,
+					cid:j+i+1,
 					description:item.description,
 					image:item.icon[2].url,
 					live:item.name,
@@ -132,16 +133,7 @@ export default {
 				})
 			}
 			return newArr
-		},
-		// 获取当前日期
-		_getToday() {
-			let time = new Date()
-			let year = time.getFullYear()
-			let month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1): time.getMonth() + 1;
-			let day = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-			let dateStr = year + "-" + month + "-" + day;
-			return dateStr
-		},
+		},		
 		onPullingDown() {
 			this.loading = true
 			// 更新数据
@@ -159,7 +151,7 @@ export default {
 			let getChinaData = () => {
 
 				return new Promise((resolve,reject) => {
-					getChinaLive(this._getToday()).then((res) => {
+					getChinaLive(getToday()).then((res) => {
 						let newArr = this._chinaFormdata(res.data.channel)
 						resolve(newArr) 
 					})
