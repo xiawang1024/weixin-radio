@@ -10,8 +10,16 @@
 			<div class="item-logo" v-if="itemsInfo">
 				<div class="img-wrap" ref="imgOuter">
 					<img
+						v-if="itemsInfo.image.indexOf('http://') == -1"
 						ref="imgInner"
 						:src="'http://program.hndt.com' + itemsInfo.image"
+						class="img"
+						:class="playOrPause ? 'isPlay' : '' "
+					>
+					<img
+						v-else
+						ref="imgInner"
+						:src="itemsInfo.image"
 						class="img"
 						:class="playOrPause ? 'isPlay' : '' "
 					>
@@ -101,11 +109,11 @@ import ProgressBar from '@/base/progressBar/progressBar'
 import DownLoad from '@/base/downLoad/downLoad'
 import CommentList from '@/base/commentList/commentList'
 
-import { getChannelItem, clickItem, getCommentList, getChinaPlayBack } from 'api/index'
+import { getChannelItem, clickItem, getCommentList, getChinaPlayBack, getChinaLive } from 'api/index'
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import dialogConf from 'common/js/dialog.js'
-import { _pad, toTimeStamp } from 'common/js/util'
+import { _pad, toTimeStamp, getToday } from 'common/js/util'
 
 import COMMENTLIST from './comment.js'
 
@@ -153,6 +161,35 @@ export default {
 		this.watchPlayPercent()
 	},	
 	methods:{
+		// 央广数据处理
+		_chinaFormdata(oldArr) {
+			let newArr = []
+			let len = oldArr.length;
+			
+			for(let i=0,j=1000;i<len;i++){
+				let item = oldArr[i]
+				newArr.push({
+					cid:j+i+1,
+					description:item.description,
+					image:item.icon[2].url,
+					live:item.name,
+					name:item.name,
+					streams:[item.streams[0].url],
+					time:''
+				})
+			}
+			return newArr
+		},		
+		_getChinaLive(id) {
+			getChinaLive(getToday()).then((res) => {
+				let newArr = this._chinaFormdata(res.data.channel)		
+				this.itemsInfo = newArr[id]	
+				this.liveStream = newArr[id].streams[0];	 
+				setTimeout(() => {
+					this._playSrc(this.liveStream)
+				},20)
+			})
+		},
 		_getCommentList(cid) {
 			getCommentList(cid).then((res) => {
 				let data = res.data
@@ -169,7 +206,7 @@ export default {
 			
 			//cid >= 1001 为央广
 
-			if(Number(cid)>1000) {
+			if(parseInt(cid)>1000) {
 				getChinaPlayBack(todayStamp, cid).then((res) => {
 					let data = res.data.program;
 					
@@ -182,6 +219,8 @@ export default {
 						this._isPlay(this.itemsList)								
 					})	
 				})
+				let id = parseInt(cid) - 1000 -1
+				this._getChinaLive(id)
 			}else{
 				clickItem(cid, todayStamp).then((res) => {
 					let data = res.data;
@@ -209,8 +248,8 @@ export default {
 			
 			let newArr = oldArr.map((item, index) => {
 				return {
-					beginTime:toTimeStamp(`2018-03-16 ${item.start}`),
-					endTime:toTimeStamp(`2018-03-16 ${item.end}`),					
+					beginTime:toTimeStamp(`2018-03-20 ${item.start}`),
+					endTime:toTimeStamp(`2018-03-20 ${item.end}`),					
 					playUrl:[item.stream[0].url],					
 					title:item.programName
 				}
@@ -356,15 +395,31 @@ export default {
 			return timestamp/1000;
 		},
 		_getItems(cid,time,isScrollTop){
-			clickItem(cid, time).then((res) => {
-				let data = res.data;
-				this.itemsList = data.programs
-				if(isScrollTop){
-					this._scrollTop()
-				}else{
-					this._scrollTo(this.isPlayIndex)
-				}
-			})
+			if(parseInt(cid) > 1000) {
+				getChinaPlayBack(time, cid).then((res) => {
+					let data = res.data.program;
+					
+					this.itemsList = this._formatChina(data)
+
+					if(!this.audio.getAttribute('src')){					
+						this._playSrc(this.liveStream)										
+					}
+					this.$nextTick(() => {
+						this._isPlay(this.itemsList)								
+					})	
+				})
+			}else{
+				clickItem(cid, time).then((res) => {
+					let data = res.data;
+					this.itemsList = data.programs
+					if(isScrollTop){
+						this._scrollTop()
+					}else{
+						this._scrollTo(this.isPlayIndex)
+					}
+				})
+
+			}
 		},
 		//监听播放信息
 		watchPlayPercent() {

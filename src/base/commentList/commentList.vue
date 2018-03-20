@@ -73,7 +73,7 @@ export default {
     },
     props:{
         cid:{
-            type:String,
+            type:Number,
             default:''
         }
     },
