@@ -113,7 +113,7 @@ import { getChannelItem, clickItem, getCommentList, getChinaPlayBack, getChinaLi
 import { addClass } from 'common/js/dom.js'
 import { isPc } from 'common/js/isPc.js'  //判断是否是电脑端
 import dialogConf from 'common/js/dialog.js'
-import { _pad, toTimeStamp, getToday } from 'common/js/util'
+import { _pad, toTimeStamp, getToday, timeStampToDate } from 'common/js/util'
 
 import COMMENTLIST from './comment.js'
 
@@ -219,7 +219,7 @@ export default {
 						this._isPlay(this.itemsList)								
 					})	
 				})
-				let id = parseInt(cid) - 1000 -1
+				let id = parseInt(cid) - 1000 -1 
 				this._getChinaLive(id)
 			}else{
 				clickItem(cid, todayStamp).then((res) => {
@@ -245,12 +245,12 @@ export default {
 		},
 		//央广数据处理
 		_formatChina(oldArr) {	
-			
+			let today = timeStampToDate()
 			let newArr = oldArr.map((item, index) => {
 				return {
-					beginTime:toTimeStamp(`2018-03-20 ${item.start}`),
-					endTime:toTimeStamp(`2018-03-20 ${item.end}`),					
-					playUrl:[item.stream[0].url],					
+					beginTime:toTimeStamp(`${today} ${item.start}`),
+					endTime:toTimeStamp(`${today} ${item.end}`),					
+					playUrl:!!item.stream[0].url ? 	[item.stream[0].url] : [],			
 					title:item.programName
 				}
 			})
@@ -361,21 +361,19 @@ export default {
 		},
 		playBackSrc(item, index) {
 			let playUrl = item.playUrl;
+			
 			if(index == this.isPlayIndex){// 如果相等，则是直播，否则是点播
 				this.isLivePlay = true
 				this._playSrc(this.liveStream)
-			}else{
-				this.isLivePlay = false
-				if(!playUrl){
-					return
-				}else{
-					if(playUrl.length == 0){
-						return
-					}else{
-						//回听
-						this.playBackTitle = item.title;
-						this._playSrc(playUrl[0])
-					}
+			}else{				
+				
+				if(playUrl && playUrl.length == 0){
+					return false
+				}else{					
+					//回听
+					this.isLivePlay = false
+					this.playBackTitle = item.title;
+					this._playSrc(playUrl[0])
 				}
 			}
 		},

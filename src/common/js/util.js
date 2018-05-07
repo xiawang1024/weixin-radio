@@ -44,11 +44,19 @@ export function toTimeStamp(date) {
  * 返回格式 2018-03-15
  */
 export function timeStampToDate(nS) {
-  let time = new Date(parseInt(nS*1000))
+  let time = null
+  if(nS) {
+    time = new Date(parseInt(nS*1000))
+  }else {
+    time = new Date()
+  }
   let year = time.getFullYear()
   let month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1): time.getMonth() + 1;
   let day = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-  let dateStr = year + "-" + month + "-" + day;
+  let dateStr = `${year}-${month}-${day}`;
+  let h = time.getHours() ;
+  let m = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+  let s = time.getSeconds();
   return dateStr
   
 }
