@@ -6,90 +6,85 @@ const wx = require('weixin-js-sdk')
 
 const HNDTHOST = 'http://program.hndt.com'
 
-const [
-    DEFAULT_TITLE,
-    DEFAULT_LINK,
-    DEFAULT_IMGURL,
-    DEFAULT_DESC
-] = [
-    '河南广播',
-    'http://www.hndt.com/player/wap/index.html',
-    'http://hndt.com/res/logo_300.png',
-    '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源，“听河南，览天下”'
+const [DEFAULT_TITLE, DEFAULT_LINK, DEFAULT_IMGURL, DEFAULT_DESC] = [
+  '河南广播',
+  'http://www.hndt.com/player/wap/index.html',
+  'http://hndt.com/res/logo_300.png',
+  '河南广播网是河南广播电视台广播业务领域的官方网站。聚合了河南广播电视台10套广播频率、 14 套网络广播、 河南18个省辖市及各县市100多套广播频率资源，“听河南，览天下”'
 ]
 
-
 let configData = {
-    url: window.location.href.split('#')[0],
-    jsApiList: [
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage',
-        'chooseImage',
-        'previewImage',
-        'startRecord', 
-        'playVoice', 
-        'stopRecord', 
-        'downloadVoice',
-        'uploadVoice',
-        'stopVoice'
-    ]
+  url: window.location.href.split('#')[0],
+  jsApiList: [
+    'onMenuShareTimeline',
+    'onMenuShareAppMessage',
+    'chooseImage',
+    'previewImage',
+    'startRecord',
+    'playVoice',
+    'stopRecord',
+    'downloadVoice',
+    'uploadVoice',
+    'stopVoice'
+  ]
 }
 
-axios.post('https://a.weixin.hndt.com/at/sign',Qs.stringify({url:configData.url})).then((res) => {
+axios
+  .post(
+    'https://a.weixin.hndt.com/boom/at/sign',
+    Qs.stringify({ url: configData.url })
+  )
+  .then(res => {
     let data = res.data
     wx.config({
-        debug: false, 
-        appId: data.appId, 
-        timestamp: data.timestamp,
-        nonceStr: data.nonceStr, 
-        signature: data.signature,
-        jsApiList: configData.jsApiList
-    });
-})
+      debug: false,
+      appId: data.appId,
+      timestamp: data.timestamp,
+      nonceStr: data.nonceStr,
+      signature: data.signature,
+      jsApiList: configData.jsApiList
+    })
+  })
 
-
-export function initShareConf (isChannel, storeShareConf, to) { 
-    let currentTitle = isChannel ? DEFAULT_TITLE : `${storeShareConf && storeShareConf.name}`
-    let currentLink = isChannel ? DEFAULT_LINK : `${configData.url}#${to.fullPath}`
-    let currentImg = isChannel ? DEFAULT_IMGURL : `${HNDTHOST}${storeShareConf && storeShareConf.image}`
-    let currentDesc = isChannel ? DEFAULT_DESC : `${storeShareConf && storeShareConf.description}`
-    return {
-        currentLink,
-        currentTitle,
-        currentImg,
-        currentDesc
-    }  
+export function initShareConf(isChannel, storeShareConf, to) {
+  let currentTitle = isChannel
+    ? DEFAULT_TITLE
+    : `${storeShareConf && storeShareConf.name}`
+  let currentLink = isChannel
+    ? DEFAULT_LINK
+    : `${configData.url}#${to.fullPath}`
+  let currentImg = isChannel
+    ? DEFAULT_IMGURL
+    : `${HNDTHOST}${storeShareConf && storeShareConf.image}`
+  let currentDesc = isChannel
+    ? DEFAULT_DESC
+    : `${storeShareConf && storeShareConf.description}`
+  return {
+    currentLink,
+    currentTitle,
+    currentImg,
+    currentDesc
+  }
 }
 
 export function wxReady(shareConf) {
-    wx.ready(function() {
-        wx.onMenuShareTimeline({
-        title: shareConf.currentTitle, 
-        link: shareConf.currentLink, 
-        imgUrl: shareConf.currentImg, 
-        success: function() {
-            
-        },
-        cancel: function() {
-            
-        }
-        });
-        wx.onMenuShareAppMessage({
-            title: shareConf.currentTitle,
-            link: shareConf.currentLink, 
-            imgUrl: shareConf.currentImg, 
-            desc: shareConf.currentDesc, 
-            type: '', 
-            dataUrl: '', 
-            success: function() {
-                
-            },
-            cancel: function() {
-                
-            }
-        });
+  wx.ready(function() {
+    wx.onMenuShareTimeline({
+      title: shareConf.currentTitle,
+      link: shareConf.currentLink,
+      imgUrl: shareConf.currentImg,
+      success: function() {},
+      cancel: function() {}
     })
+    wx.onMenuShareAppMessage({
+      title: shareConf.currentTitle,
+      link: shareConf.currentLink,
+      imgUrl: shareConf.currentImg,
+      desc: shareConf.currentDesc,
+      type: '',
+      dataUrl: '',
+      success: function() {},
+      cancel: function() {}
+    })
+  })
 }
-
-
-
