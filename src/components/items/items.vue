@@ -426,7 +426,7 @@ export default {
     _playHlsSrc(stream) {
       if (this._isPc()) {
         require.ensure([], () => {
-          const Hls = require('hls')
+          const Hls = require('hls.js')
           this.hls = new Hls()
           if (Hls.isSupported()) {
             this.hls.loadSource(stream)
