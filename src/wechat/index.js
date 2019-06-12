@@ -1,5 +1,3 @@
-import router from "@/router";
-import store from "@/store";
 import axios from "axios";
 import Qs from "qs";
 const wx = require("weixin-js-sdk");
