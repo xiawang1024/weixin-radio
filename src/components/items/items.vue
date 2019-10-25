@@ -9,7 +9,7 @@
     <div class="audio-wrap">
       <div class="item-logo" v-if="itemsInfo">
         <div class="img-wrap" ref="imgOuter">
-          <img v-if="itemsInfo.image.indexOf('http://') == -1" ref="imgInner" :src="'http://program.hndt.com' + itemsInfo.image" class="img" :class="playOrPause ? 'isPlay' : '' ">
+          <img v-if="itemsInfo.image.indexOf('http://') == -1" ref="imgInner" :src="'http://cmsres.dianzhenkeji.com' + itemsInfo.image" class="img" :class="playOrPause ? 'isPlay' : '' ">
           <img v-else ref="imgInner" :src="itemsInfo.image" class="img" :class="playOrPause ? 'isPlay' : '' ">
         </div>
         <span :class=" playOrPause ? 'icon-pause' : 'icon-play'" @click="playSwitch"></span>
