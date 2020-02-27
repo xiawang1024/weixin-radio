@@ -4,10 +4,10 @@
  * @Company: hNdt
  * @Author: xiaWang1024
  * @Date: 2019-06-12 15:04:19
- * @LastEditTime: 2019-10-25 11:03:17
+ * @LastEditTime: 2020-02-27 10:52:46
  */
 import axios from 'axios'
-axios.defaults.baseURL = 'http://prog.dianzhenkeji.com/program'
+axios.defaults.baseURL = 'https://prog.dianzhenkeji.com/program'
 
 /**
  * 全部直播列表
@@ -34,7 +34,7 @@ const getChannelItem = (channelId) => axios.get('/get/live/channel/' + channelId
  */
 const clickItem = (channelId, time) => axios.get('/get/vod/program/' + channelId + '/' + time)
 
-const getCommentList = (id, toId = -1, page = 1) => axios.get('http://talk.hndt.com/hngbWeb/api/comment/showCommentforPage.do?', {
+const getCommentList = (id, toId = -1, page = 1) => axios.get('https://talk.hndt.com/hngbWeb/api/comment/showCommentforPage.do?', {
   params: {
     id,
     toId,
